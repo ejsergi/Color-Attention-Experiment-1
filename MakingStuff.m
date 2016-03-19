@@ -15,10 +15,10 @@ for hue = 10%:20:350
 %%%%
 meansvalues = MEANSTOCHOI(choi((i-1)*8+1:(i*8)));
 L_Target = 50;
-Deviation = 50;
+Deviation = 1;
 HueRange = [hue-10 hue+10];
 SL_Target = 50;
-SDeviation = 50;
+SDeviation = 1;
 sHueRange = [0 360];
 %%%%
 
@@ -43,7 +43,9 @@ info(end).guide = legendIm;
     
 end
 
-imwrite(TESTMoni,['FIGURESPRESENTATION/IMAGEAll.png']);
+imshow(TESTMoni)
+
+%imwrite(TESTMoni,['FIGURESPRESENTATION/IMAGEAll.png']);
 %%
 
 % infosimple = rmfield(info,{'image','guide'});
