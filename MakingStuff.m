@@ -1,6 +1,8 @@
 clear all
 close all
 
+addpath('Profiles and Colors/')
+
 nameExp = 'EXPERIMENT1Andres';
 
 info = struct([]);
@@ -56,12 +58,12 @@ imshow(TESTMoni)
 
 %%
 
-CHROMAS = [info(1).means info(2).means info(3).means];
-[~,index1] = sortrows([CHROMAS.MEANMIXTURE].'); CHROMAS = CHROMAS(index1); clear index1;
-
-for i=1:length(CHROMAS)
-    
-    valu(i) = CHROMAS(i).mean(2);
-    
-end
+% CHROMAS = [info(1).means info(2).means info(3).means];
+% [~,index1] = sortrows([CHROMAS.MEANMIXTURE].'); CHROMAS = CHROMAS(index1); clear index1;
+% 
+% for i=1:length(CHROMAS)
+%     
+%     valu(i) = CHROMAS(i).mean(2);
+%     
+% end
 

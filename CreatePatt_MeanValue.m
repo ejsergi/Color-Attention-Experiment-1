@@ -59,7 +59,7 @@ infoSur = struct('mean',[mean(Lm(:)) sqrt((mean(am(:)).^2)+(mean(bm(:)).^2)) wra
 
 %%%%
 
-nnpixels = round(npixels/8);
+nnpixels = round(npixels/8)+20;
 
 Sel = logical((Li<=L_Target+Deviation).*(Li>=L_Target-Deviation)...
     .*(Hue<HueRange(2)).*(Hue>HueRange(1)));
@@ -95,7 +95,11 @@ end
 MEANVALUE = meansvalues(i);
 %%%%%%
 
-Rand2 = rand(nnpixels)+MEANVALUE;
+circlePixels = drawcircle(npixels,xpos,ypos,round(nnpixels/2-20));
+pcirclePixels = drawcircle(nnpixels,round(nnpixels/2),round(nnpixels/2),round(nnpixels/2-20));
+
+
+Rand2 = rand(nnpixels)+MEANVALUE; % ADD GAUSSIAN STUFF HERE
 Rand2 = cat(3,Rand2,Rand2,Rand2);
 
 sTESTLab = zeros(size(sTESTLab1));
@@ -104,7 +108,7 @@ sTESTLab(Rand2>=0.5) = sTESTLab1(Rand2>=0.5);
 
 sTESTMoni = applycform(sTESTLab,Lab2Moni);
 
-TESTMoni(xpos-round(nnpixels/2)+1:xpos+round(nnpixels/2),ypos-round(nnpixels/2)+1:ypos+round(nnpixels/2),:) = sTESTMoni;
+TESTMoni(circlePixels==1) = sTESTMoni(pcirclePixels==1);
 
 % imshow(TESTMoni);
 

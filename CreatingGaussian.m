@@ -6,8 +6,10 @@ A(11:41,11:41) = 1;
 
 imshow(A)
 
-B = imgaussfilt(A,3);
+fil = fspecial('gaussian',[20 20],2);
+
+B = imfilter(A,fil);
 
 imshow(B)
 
-plot(B(25,:))
+figure; plot(B(25,:))
