@@ -1,15 +1,24 @@
 clear all
 close all
 
-A = zeros(51);
-A(11:41,11:41) = 1;
+A = double(drawcircle(1000,550,550,100));
 
 imshow(A)
 
-fil = fspecial('gaussian',[20 20],2);
+B = imgaussian(A,30,100);
 
-B = imfilter(A,fil);
+figure; imshow(B)
 
-imshow(B)
+figure; plot(B(550,:,1))
 
-figure; plot(B(25,:))
+C = rand(1000);
+C = cat(3,C,C,C);
+
+T = (C+B)/2;
+
+figure; imshow(T);
+
+F = zeros(size(T));
+F(T>0.5)=1;
+
+figure; imshow(F);
