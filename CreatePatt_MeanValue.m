@@ -66,8 +66,8 @@ Sel = logical((Li<=L_Target+Deviation).*(Li>=L_Target-Deviation)...
 
 sL = Li(Sel); sa = ai(Sel); sb = bi(Sel);
 
-sRadsel1 = floor(rand(nnpixels)*(size(sL,1)-1)+1);
-sRadsel2 = floor(rand(nnpixels)*(size(L,1)-1)+1);
+sRadsel1 = floor(rand(npixels)*(size(sL,1)-1)+1);
+sRadsel2 = floor(rand(npixels)*(size(L,1)-1)+1);
 
 sTESTLab1 = cat(3,sL(sRadsel1),sa(sRadsel1),sb(sRadsel1));
 sTESTLab2 = cat(3,L(sRadsel2),a(sRadsel2),b(sRadsel2));
@@ -86,7 +86,7 @@ while FALSE==1
     xpos = randperm(npixels,1);
     ypos = randperm(npixels,1);
     
-    if posible(xpos,ypos)==1
+    if posible(ypos,xpos)==1
         FALSE = 0;
     end
     
@@ -95,7 +95,11 @@ end
 MEANVALUE = meansvalues(i);
 %%%%%%
 
-Rand2 = rand(nnpixels)+MEANVALUE;
+circlePixels = drawcircle(npixels,xpos,ypos,round(nnpixels/2));
+pcirclePixels = drawcircle(npixels,xpos,ypos,round(nnpixels*1.25));
+
+
+Rand2 = rand(npixels)+MEANVALUE; % ADD GAUSSIAN STUFF HERE
 Rand2 = cat(3,Rand2,Rand2,Rand2);
 
 sTESTLab = zeros(size(sTESTLab1));
@@ -104,7 +108,20 @@ sTESTLab(Rand2>=0.5) = sTESTLab1(Rand2>=0.5);
 
 sTESTMoni = applycform(sTESTLab,Lab2Moni);
 
-TESTMoni(xpos-round(nnpixels/2)+1:xpos+round(nnpixels/2),ypos-round(nnpixels/2)+1:ypos+round(nnpixels/2),:) = sTESTMoni;
+% fil = fspecial('gaussian',[round(nnpixels/2) round(nnpixels/2)],round(nnpixels/6));
+% 
+% B = imfilter(double(circlePixels),fil);
+
+B = imgaussian(double(circlePixels),round(nnpixels/6),round(nnpixels/2));
+
+C = rand(npixels);
+C = cat(3,C,C,C);
+
+T = (C+B)/2;
+F = zeros(size(T));
+F(T>0.5)=1;
+
+TESTMoni(F==1) = sTESTMoni(F==1);
 
 % imshow(TESTMoni);
 
@@ -118,8 +135,8 @@ info(i).MEANMIXTURE = MEANVALUE;
 info(i).mean=[mean(Lm(:)) sqrt((mean(am(:)).^2)+(mean(bm(:)).^2)) wrapTo360(atan2d(mean(bm(:)),mean(am(:))))];
 info(i).std=[std(Lm(:)) std(Chromam(:)) std(Huem(:))];
 
-posible(xpos+1-nnpixels:xpos-1+nnpixels,ypos+1-nnpixels:ypos-1+nnpixels) = 0;
+posible = posible-double(pcirclePixels(:,:,1));
 
-legendIm(xpos-round(nnpixels/2)+1:xpos+round(nnpixels/2),ypos-round(nnpixels/2)+1:ypos+round(nnpixels/2)) = i;
+legendIm(circlePixels(:,:,1)==1) = i;
 
 end

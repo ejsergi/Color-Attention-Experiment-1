@@ -1,6 +1,8 @@
 clear all
 close all
 
+addpath('Profiles and Colors/')
+
 nameExp = 'EXPERIMENT1Andres';
 
 info = struct([]);
@@ -15,10 +17,10 @@ for hue = 10%:20:350
 %%%%
 meansvalues = MEANSTOCHOI(choi((i-1)*8+1:(i*8)));
 L_Target = 50;
-Deviation = 50;
+Deviation = 1;
 HueRange = [hue-10 hue+10];
 SL_Target = 50;
-SDeviation = 50;
+SDeviation = 1;
 sHueRange = [0 360];
 %%%%
 
@@ -43,7 +45,9 @@ info(end).guide = legendIm;
     
 end
 
-imwrite(TESTMoni,['FIGURESPRESENTATION/IMAGEAll.png']);
+imshow(TESTMoni)
+
+%imwrite(TESTMoni,['FIGURESPRESENTATION/IMAGEAll.png']);
 %%
 
 % infosimple = rmfield(info,{'image','guide'});
@@ -54,12 +58,12 @@ imwrite(TESTMoni,['FIGURESPRESENTATION/IMAGEAll.png']);
 
 %%
 
-CHROMAS = [info(1).means info(2).means info(3).means];
-[~,index1] = sortrows([CHROMAS.MEANMIXTURE].'); CHROMAS = CHROMAS(index1); clear index1;
-
-for i=1:length(CHROMAS)
-    
-    valu(i) = CHROMAS(i).mean(2);
-    
-end
+% CHROMAS = [info(1).means info(2).means info(3).means];
+% [~,index1] = sortrows([CHROMAS.MEANMIXTURE].'); CHROMAS = CHROMAS(index1); clear index1;
+% 
+% for i=1:length(CHROMAS)
+%     
+%     valu(i) = CHROMAS(i).mean(2);
+%     
+% end
 
