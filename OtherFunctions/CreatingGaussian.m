@@ -4,7 +4,7 @@ close all
 A = double(drawcircle(1000,550,550,100));
 
 imshow(A)
-
+mex imgaussian.c -v
 B = imgaussian(A,30,100);
 
 figure; imshow(B)

@@ -1,4 +1,4 @@
-function [TESTMoni,info,legendIm,infoSur] = CreatePatt_MeanValue...
+function [FinalTESTMoni,info,legendIm,infoSur] = CreatePatt_MeanValue...
     (meansvalues,L_Target,Deviation,HueRange,SL_Target,SDeviation,sHueRange)
 %%%%%
 % meansvalues = ((CHANGING VARIABLE)) Mean between stimuli and background 
@@ -42,7 +42,7 @@ Radsel = floor(rand(npixels)*(size(L,1)-1)+1);
 
 TESTLab = cat(3,L(Radsel),a(Radsel),b(Radsel));
 
-TESTMoni = applycform(TESTLab,Lab2Moni);
+TESTMoni = TESTLab;
 
 % imshow(TESTMoni);
 
@@ -106,7 +106,7 @@ sTESTLab = zeros(size(sTESTLab1));
 sTESTLab(Rand2<0.5) = sTESTLab2(Rand2<0.5);
 sTESTLab(Rand2>=0.5) = sTESTLab1(Rand2>=0.5);
 
-sTESTMoni = applycform(sTESTLab,Lab2Moni);
+sTESTMoni = sTESTLab;
 
 % fil = fspecial('gaussian',[round(nnpixels/2) round(nnpixels/2)],round(nnpixels/6));
 % 
@@ -139,4 +139,7 @@ posible = posible-double(pcirclePixels(:,:,1));
 
 legendIm(circlePixels(:,:,1)==1) = i;
 
+end
+
+FinalTESTMoni = applycform(TESTMoni,Lab2Moni);
 end
