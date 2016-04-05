@@ -185,7 +185,8 @@ save(['STIMULIS/' nameExp '.mat'],'info','-v7.3');
 
 end_time = toc;
 
-disp(['End exp. ' nameExp ' (Time used: ' mat2str(end_time/(60*60),4) 'h)']);
+disp(['End exp. ' nameExp ' (Time used: ' int2str(end_time/60) 'h ' ... 
+    int2str(end_time(5)) 'm ' int2str(end_time(6)) 's)']);
 
 
 
