@@ -55,11 +55,7 @@ Chromam = sqrt((am.^2)+(bm.^2));
 infoSur = struct('mean',[mean(Lm(:)) sqrt((mean(am(:)).^2)+(mean(bm(:)).^2)) wrapTo360(atan2d(mean(bm(:)),mean(am(:))))],'std',[std(Lm(:)) std(Chromam(:)) std(Huem(:))]);
 %% Diferent distribution
 
-%%%%
-
-%%%%
-
-nnpixels = round(npixels/8);
+nnpixels = round(npixels*tand(1)*26*2/(13+3/8));
 
 Sel = logical((Li<=L_Target+Deviation).*(Li>=L_Target-Deviation)...
     .*(Hue<HueRange(2)).*(Hue>HueRange(1)));

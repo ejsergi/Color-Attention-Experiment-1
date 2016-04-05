@@ -22,7 +22,7 @@ for hue = 10%:20:350
     
     choi = randperm(length(MEANSTOCHOI));
     
-    for i=1:3
+    for i=1%:3
         
         meansvalues = MEANSTOCHOI(choi((i-1)*8+1:(i*8)));
 
@@ -60,12 +60,12 @@ imshow(TESTMoni)
 
 %
 
-CHROMAS = [info(1).means info(2).means info(3).means];
-[~,index1] = sortrows([CHROMAS.MEANMIXTURE].'); CHROMAS = CHROMAS(index1); clear index1;
-
-for i=1:length(CHROMAS)
-    
-    valu(i) = CHROMAS(i).mean(2);
-    
-end
+% CHROMAS = [info(1).means info(2).means info(3).means];
+% [~,index1] = sortrows([CHROMAS.MEANMIXTURE].'); CHROMAS = CHROMAS(index1); clear index1;
+% 
+% for i=1:length(CHROMAS)
+%     
+%     valu(i) = CHROMAS(i).mean(2);
+%     
+% end
 
