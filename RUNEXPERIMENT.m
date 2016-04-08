@@ -3,7 +3,7 @@ close all
 
 nameExp = '001';
 
-load(['EXPERIMENTFILES/' nameExp '.mat']);
+load(['STIMULIS/' nameExp '.mat']);
 info = infosimple;
 
 PsychDefaultSetup(2);
