@@ -4,7 +4,7 @@ close all
 addpath('Profiles and Colors/')
 addpath('OtherFunctions/')
 
-for nexper=1%:5
+for nexper=2:10
 
 tic    
     
