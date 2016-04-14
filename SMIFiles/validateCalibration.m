@@ -93,7 +93,7 @@ for count2 = 1:1:nocalibpoints
     end   
 end
 
-fullscreen(stim,1);
+imshow(stim);
 
 pause(1);
 
