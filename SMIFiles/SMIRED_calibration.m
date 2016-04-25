@@ -104,11 +104,9 @@ while 1
                 eval(sprintf('cy = CalibrationPoints.Point%1.0f(2);',a));
                 
                 % Create cross
-                stim(cy-10:cy+10,cx,1:3) = 255;
-                stim(cy,cx-10:cx+10,1:3) = 255;
-                stim(cy-1:cy+1,cx-1:cx+1,1) = 127;
-                stim(cy-1:cy+1,cx-1:cx+1,2) = 0;
-                stim(cy-1:cy+1,cx-1:cx+1,3) = 0;
+                stim(cy-20:cy+20,cx-1:cx+1,1) = 255;
+                stim(cy-1:cy+1,cx-20:cx+20,1) = 255;
+                
                                 
                 % Display calibration point on screen
                 fullscreen(stim,DisplayScreen);
@@ -133,7 +131,7 @@ end % while
 catch exception
    disp(exception.identifier); 
    closescreen();
-   readSMIRed.stopQueueSMIData(); 
-   sendSMIRed.stopSendConnection();
+%    readSMIRed.stopQueueSMIData(); 
+%    sendSMIRed.stopSendConnection();
    throw(exception);
 end    

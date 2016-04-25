@@ -84,12 +84,12 @@ for count2 = 1:1:nocalibpoints
       ErrorY = uint16(calibY - calibPoints(count2,4));  
     end
 
-    stim(calibY-5:calibY+5,calibX,2) = 255;
-    stim(calibY,calibX-5:calibX+5,2) = 255;    
+    stim(calibY-10:calibY+10,calibX-1:calibX+1,2) = 255;
+    stim(calibY-1:calibY+1,calibX-10:calibX+10,2) = 255;    
    
-    if ErrorY-5 > 0 && ErrorY+5 <= 1050 && ErrorX-5 > 0 && ErrorX+5 <= 1680
-        stim(ErrorY-5:ErrorY+5,ErrorX,1) = 255;
-        stim(ErrorY,ErrorX-5:ErrorX+5,1) = 255;    
+    if ErrorY-10 > 0 && ErrorY+10 <= ScreenResolution(2) && ErrorX-10 > 0 && ErrorX+10 <= ScreenResolution(1)
+        stim(ErrorY-10:ErrorY+10,ErrorX-1:ErrorX+1,1) = 255;
+        stim(ErrorY-1:ErrorY+1,ErrorX-10:ErrorX+10,1) = 255;    
     end   
 end
 
@@ -119,13 +119,15 @@ while (strcmp(varout,'Run') == 0 && strcmp(varout,'Skip') == 0)
     if(strcmp(varout,'Accept') == 1)
         commandstring = sprintf('ET_REM "Accept Calibration"');
         ssendSMIRed.executeMsg(commandstring);
-        calibrationSuccess = 0;               
+        calibrationSuccess = 0;
+        
         break;
     end
     if(strcmp(varout,'Decline') == 1)
         commandstring = sprintf('ET_REM "Decline Calibration"');
         sendSMIRed.executeMsg(commandstring);
         calibrationSuccess = 1;
+        
         break;
     end          
 end
@@ -136,8 +138,8 @@ readSMIRed.resetSMIQueue();
 catch exception
    disp(exception.identifier); 
    closescreen();
-   readSMIRed.stopQueueSMIData(); 
-   sendSMIRed.stopSendConnection();
+%    readSMIRed.stopQueueSMIData(); 
+%    sendSMIRed.stopSendConnection();
    calibrationSuccess = 0;
    return;
 end    
