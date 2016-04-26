@@ -1,15 +1,20 @@
 clear all
 close all
 
-nameExp = '001';
+nameExp = '004';
 
 addpath('SMIFiles/');
 
 load('SMIFiles/EnvDet.mat');
 
-[sendSMIRed,readSMIRed] = setupSMIRED();
 
 load(['STIMULIS/' nameExp '.mat']);
+
+permu = randperm(length(info)/3);
+
+sele = [1:9:648 2:9:648 3:9:648];
+
+info(1).Permutation = permu;
 
 PsychDefaultSetup(2);
 
@@ -31,12 +36,37 @@ imageTexture = Screen('MakeTexture', window, theImage);
 Screen('DrawTextures', window, imageTexture);
 Screen('Flip', window); 
 
-permu = randperm(length(info));
+waitforbuttonpress;
+
+sca;
+
+[sendSMIRed,readSMIRed] = setupSMIRED();
+
+close gcf
+
+PsychDefaultSetup(2);
+
+screens = Screen('Screens');
+screenNumber = max(screens);
+white = WhiteIndex(screenNumber);
+black = BlackIndex(screenNumber);
+grey = white / 2;
+inc = white - grey;
+[window, windowRect] = PsychImaging('OpenWindow', screenNumber, black);
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+ifi = Screen('GetFlipInterval', window);
+[xCenter, yCenter] = RectCenter(windowRect);
+Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
+
+cross = zeros(1440,1440,3);
+cross(719:721,700:740,1)=1;
+cross(700:740,719:721,1)=1;
+crossTexture = Screen('MakeTexture', window, cross);
 
 for i=1:length(permu);
     
     theImage = imread(['/Volumes/myshares/Sergis share/STIMULIS/' nameExp '/S' ...
-    sprintf('%03d',permu(i)) '.png']);
+    sprintf('%03d',sele(permu(i))) '.png']);
     imageTexture = Screen('MakeTexture', window, theImage); 
     [s1, s2, s3] = size(theImage);
     Screen('DrawTextures', window, imageTexture);
@@ -48,26 +78,26 @@ for i=1:length(permu);
 
     Screen('Flip', window);
 
-    LastSeen = input([int2str(i) '/' int2str(length(info)) ': ']);
-    info(permu(i)).LastSeen = LastSeen;
-    info(permu(i)).Time = toc;
+    LastSeen = input([int2str(i) '/' int2str(length(permu)) ': ']);
+    info(sele(permu(i))).LastSeen = LastSeen;
+    info(sele(permu(i))).Time = toc;
     
     sendSMIRed.executeMsg('ET_STP');
     sendSMIRed.executeMsg('ET_REM "Stop eye recording"'); 
     
-    toSend = ['ET_SAV "D:/SergiResults/' nameExp '/' sprintf('%03d',permu(i)) '.idf" "' nameExp '" "' sprintf('%03d',permu(i)) '" "OVR"'];
+    toSend = ['ET_SAV "D:/SergiResults/' nameExp '/' sprintf('%03d',sele(permu(i))) '.idf" "' nameExp '" "' sprintf('%03d',permu(i)) '" "OVR"'];
 
     sendSMIRed.executeMsg(toSend);
     
-    Screen('FillRect', window, black);
+    Screen('DrawTextures', window, crossTexture);
     Screen('Flip', window);
 
-    WaitSecs(2);
+    WaitSecs(1);
     
-    if (i==220||i==440)
+    if (i==108)
         
-        readSMIRed.stopQueueSMIData(); 
-        sendSMIRed.stopSendConnection();
+        save(['EXPERIMENTFILES/' nameExp '.mat'],'info','-v7.3');
+        
         sca;
         
         f = figure;
@@ -76,7 +106,12 @@ for i=1:length(permu);
         uiwait(gcf);
         close(f);
         
-        [sendSMIRed,readSMIRed] = setupSMIRED();
+        calibrationSuccess = 1;
+        while(calibrationSuccess)
+        [output] = SMIRED_calibration(sendSMIRed,readSMIRed);
+        [calibrationSuccess] = validateCalibration(sendSMIRed,readSMIRed);
+        end
+        close gcf
         
         PsychDefaultSetup(2);
 
@@ -91,6 +126,11 @@ for i=1:length(permu);
         ifi = Screen('GetFlipInterval', window);
         [xCenter, yCenter] = RectCenter(windowRect);
         Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
+        
+        cross = zeros(1440,1440,3);
+        cross(719:721,700:740,1)=1;
+        cross(700:740,719:721,1)=1;
+        crossTexture = Screen('MakeTexture', window, cross);
         
     end
 

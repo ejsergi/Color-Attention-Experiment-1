@@ -93,7 +93,7 @@ for count2 = 1:1:nocalibpoints
     end   
 end
 
-imshow(stim);
+h = figure; imshow(stim);
 
 pause(1);
 
@@ -121,12 +121,14 @@ while (strcmp(varout,'Run') == 0 && strcmp(varout,'Skip') == 0)
         ssendSMIRed.executeMsg(commandstring);
         calibrationSuccess = 0;
         
+        
         break;
     end
     if(strcmp(varout,'Decline') == 1)
         commandstring = sprintf('ET_REM "Decline Calibration"');
         sendSMIRed.executeMsg(commandstring);
         calibrationSuccess = 1;
+        
         
         break;
     end          

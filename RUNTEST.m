@@ -8,6 +8,7 @@ addpath('SMIFiles/');
 load('SMIFiles/EnvDet.mat');
 
 [sendSMIRed,readSMIRed] = setupSMIRED();
+close gcf
 
 PsychDefaultSetup(2);
 
@@ -54,8 +55,6 @@ for i=1:3;
     
     if (i==1)
         
-        readSMIRed.stopQueueSMIData(); 
-        sendSMIRed.stopSendConnection();
         sca;
         
         f = figure;
@@ -64,7 +63,12 @@ for i=1:3;
         uiwait(gcf);
         close(f);
         
-        [sendSMIRed,readSMIRed] = setupSMIRED();
+        calibrationSuccess = 1;
+        while(calibrationSuccess)
+        [output] = SMIRED_calibration(sendSMIRed,readSMIRed);
+        [calibrationSuccess] = validateCalibration(sendSMIRed,readSMIRed);
+        end
+        close gcf
         
         PsychDefaultSetup(2);
 
@@ -88,5 +92,5 @@ end
 sca;
 
 readSMIRed.stopQueueSMIData(); 
-   sendSMIRed.stopSendConnection();
+sendSMIRed.stopSendConnection();
 
