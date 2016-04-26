@@ -51,6 +51,36 @@ for i=1:3;
     Screen('Flip', window);
 
     WaitSecs(2);
+    
+    if (i==1)
+        
+        readSMIRed.stopQueueSMIData(); 
+        sendSMIRed.stopSendConnection();
+        sca;
+        
+        f = figure;
+        h = uicontrol('Position',[20 20 200 40],'String','Continue',...
+                'Callback','uiresume(gcbf)');
+        uiwait(gcf);
+        close(f);
+        
+        [sendSMIRed,readSMIRed] = setupSMIRED();
+        
+        PsychDefaultSetup(2);
+
+        screens = Screen('Screens');
+        screenNumber = max(screens);
+        white = WhiteIndex(screenNumber);
+        black = BlackIndex(screenNumber);
+        grey = white / 2;
+        inc = white - grey;
+        [window, windowRect] = PsychImaging('OpenWindow', screenNumber, black);
+        [screenXpixels, screenYpixels] = Screen('WindowSize', window);
+        ifi = Screen('GetFlipInterval', window);
+        [xCenter, yCenter] = RectCenter(windowRect);
+        Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
+        
+    end
 
 end
 
