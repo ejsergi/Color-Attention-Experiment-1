@@ -4,7 +4,7 @@ close all
 addpath('Profiles and Colors/')
 addpath('OtherFunctions/')
 
-for nexper=2:10
+for nexper=11:20
 
 tic    
     
@@ -21,7 +21,7 @@ SL_Target = 50;
 SDeviation = 50;
 sHueRange = [0 360];
 %%%%
-MEANSTOCHOI = ([-0.495:0.005:-0.4 -0.3:0.1:0]);
+MEANSTOCHOI = (-0.49:0.0125:-0.2);
 
 for hue = 10:20:350
     HueRange = [hue-10 hue+10];
@@ -62,7 +62,7 @@ SL_Target = 50;
 SDeviation = 1;
 sHueRange = [0 360];
 %%%%
-MEANSTOCHOI = ([-0.495:0.005:-0.4 -0.3:0.1:0]);
+MEANSTOCHOI = (-0.49:0.0125:-0.2);
 
 for hue = 10:20:350
     HueRange = [hue-10 hue+10];
@@ -104,7 +104,7 @@ SL_Target = 25;
 SDeviation = 1;
 sHueRange = [0 360];
 %%%%
-MEANSTOCHOI = ([-0.495:0.005:-0.4 -0.3:0.1:0]);
+MEANSTOCHOI = (-0.49:0.0125:-0.2);
 
 for hue = 10:20:350
     HueRange = [hue-10 hue+10];
@@ -146,7 +146,7 @@ SL_Target = 75;
 SDeviation = 1;
 sHueRange = [0 360];
 %%%%
-MEANSTOCHOI = ([-0.495:0.005:-0.4 -0.3:0.1:0]);
+MEANSTOCHOI = (-0.49:0.0125:-0.2);
 
 for hue = 10:20:350
     HueRange = [hue-10 hue+10];
