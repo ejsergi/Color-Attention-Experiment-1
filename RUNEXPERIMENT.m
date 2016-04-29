@@ -1,7 +1,7 @@
 clear all
 close all
 
-nameExp = '004';
+nameExp = '017';
 
 addpath('SMIFiles/');
 

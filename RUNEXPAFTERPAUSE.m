@@ -1,7 +1,7 @@
 clear all
 close all
 
-nameExp = '004';
+nameExp = '016';
 
 addpath('SMIFiles/');
 
@@ -39,7 +39,7 @@ cross(719:721,700:740,1)=1;
 cross(700:740,719:721,1)=1;
 crossTexture = Screen('MakeTexture', window, cross);
 
-for i=127:length(permu);
+for i=79:length(permu);
     
     theImage = imread(['/Volumes/myshares/Sergis share/STIMULIS/' nameExp '/S' ...
     sprintf('%03d',sele(permu(i))) '.png']);
@@ -54,7 +54,7 @@ for i=127:length(permu);
 
     Screen('Flip', window);
 
-    LastSeen = input([int2str(i) '/' int2str(length(info)) ': ']);
+    LastSeen = input([int2str(i) '/' int2str(length(permu)) ': ']);
     info(sele(permu(i))).LastSeen = LastSeen;
     info(sele(permu(i))).Time = toc;
     
@@ -70,9 +70,12 @@ for i=127:length(permu);
 
     WaitSecs(1);
     
-    if (i==100||i==200||i==300||i==400||i==500||i==600)
+    if (i==150)
         
         sca;
+        
+        save(['EXPERIMENTFILES/' nameExp '.mat'],'info','-v7.3');
+
         
         f = figure;
         h = uicontrol('Position',[20 20 200 40],'String','Continue',...
