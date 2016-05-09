@@ -8,6 +8,8 @@ ProfLab = iccread('Generic Lab Profile.icc');
 Lab2Moni = makecform('icc', ProfLab, Moni);
 Moni2Lab = makecform('icc', Moni, ProfLab);
 
+pix2deg = 49;
+
 nameExp = '011';
 
 load(['EXPERIMENTFILES/' nameExp '.mat']);
@@ -51,15 +53,23 @@ for j=1:8
     loc = (imL==j);
     ChromaVal(j) = sqrt(mean(aIm(loc)).^2+mean(bIm(loc)).^2);
     realChroma(j) = info(check(i)).means(j).MEANMIXTURE;
+    STATS = regionprops(loc,'Centroid');
+    center = STATS.Centroid;
+    lenCent(j) = sqrt((center(1)-720).^2+(center(2)-720).^2);
+    angCent(j) = wrapTo360(atan2d(center(1)-720,center(2)-720));
     
 end
 [~,SorChroma] = sort(ChromaVal);
 newChrom = sort((realChroma+1)*30-14);
+lenCent = lenCent(SorChroma);
+angCent = angCent(SorChroma);
 for j=1:8
     loc = (imL==j);
     imChroma(loc) = newChrom(SorChroma==j);
 end
+
 if i==0
+
 figure; imshow(imS);
 figure;
 for j=1:size(eFix,1);
@@ -112,6 +122,8 @@ end
 FinalInfo(i).nFixations = size(eFix,1);
 FinalInfo(i).nSaccades = size(eSac,1);
 FinalInfo(i).ChromaValues = unique(imChroma);
+FinalInfo(i).EccenMag = lenCent/pix2deg;
+FinalInfo(i).EccenAng = angCent;
 FinalInfo(i).PointsFix = unique(ptsFix);
 FinalInfo(i).FixOfTotal = double(ismember(CHROMAS,unique(ptsFix)));
 FinalInfo(i).FirstFix = frstPatch;

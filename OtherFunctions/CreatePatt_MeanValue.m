@@ -123,7 +123,7 @@ TESTMoni(F==1) = sTESTMoni(F==1);
 
 Lm = sTESTLab(:,:,1); am = sTESTLab(:,:,2); bm = sTESTLab(:,:,3); 
 
-Huem = atan2d(bm,am);
+Huem = 0;
 Huem(Huem<0) = Huem(Huem<0)+360;
 Chromam = sqrt((am.^2)+(bm.^2));
 
