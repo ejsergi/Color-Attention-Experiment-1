@@ -59,7 +59,7 @@ for j=1:8
     loc = (imL==j);
     imChroma(loc) = newChrom(SorChroma==j);
 end
-if i==2
+if i==0
 figure; imshow(imS);
 figure;
 for j=1:size(eFix,1);
@@ -84,7 +84,7 @@ for j=1:size(eFix,1);
     y = floor(str2num(cell2mat(eFix(j,13))));
     disx = floor(str2num(cell2mat(eFix(j,17))));
     disy = floor(str2num(cell2mat(eFix(j,18))));
-    diambig = 150;
+    diambig = 200;
     if x-diambig>0&&x+diambig<=1440&&y-diambig>0&&y+diambig<=1440
     fixi = zeros(size(imChroma));
     fixi = insertShape(fixi,'FilledCircle',[x y diambig],'Color','white','Opacity',1);
