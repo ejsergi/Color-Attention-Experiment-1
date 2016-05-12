@@ -11,7 +11,7 @@ Moni2Lab = makecform('icc', Moni, ProfLab);
 
 pix2deg = 49;
 
-nameExp = '025';
+nameExp = '020';
 
 
 
@@ -22,7 +22,7 @@ load(['ImportET/ET_' nameExp '.mat']);
 sele = [1:9:648 2:9:648 3:9:648];
 permu = info(1).Permutation;
 
-check = 163:165;
+check = 361:363;
 Xresol = (2560-1440)/2;
 
 CHROMAS = ((-0.49:0.0125:-0.2)+1)*30-14;
@@ -70,13 +70,13 @@ for j=1:8
     imChroma(loc) = newChrom(SorChroma==j);
 end
 
-if i==0||i==1||i==2||i==3
+if i==3%||i==1||i==2||i==3
 
 figure(1); imshow(imS);
 figure(2);
 for j=1:size(eFix,1);
     
-    imshow(insertShape(imChroma,'FilledCircle',[str2num(cell2mat(eFix(j,12)))-Xresol str2num(cell2mat(eFix(j,13))) 50],'Color','white','Opacity',1),[]); hold on
+    imshow(imChroma,[]); hold on
     colormap(hot),colorbar;
         
     plot(str2num(cell2mat(eFix(j,12)))-Xresol,...

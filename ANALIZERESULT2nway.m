@@ -1,7 +1,7 @@
 clear all
 close all
 
-load('A.mat');
+load('C.mat');
 % A = B;
 
 expnames = [11,12,14,15,16,18,19,20,21,22,24,25];
@@ -9,6 +9,7 @@ sele = [1:9:648 2:9:648 3:9:648];
 
 previous = zeros(4,18,3,12);
 timetaken = zeros(4,18,3,12);
+totalreported = zeros(4,18,3,12);
 
 
 for nex = 1:length(expnames);
@@ -51,6 +52,7 @@ for i=1:4
                 previous(i,j,t,nex) = 1;
                 end
                 timetaken(i,j,t,nex) = info(iter).Time;
+                totalreported(i,j,t,nex) = info(iter).LastSeen;
                 total = total+info(iter).LastSeen;
                 iter = iter+1;
                 
@@ -91,6 +93,7 @@ CHROMAS = A(1,:,1,1);
 colors = applycform([50*ones(1,361); a; b]',makecform('lab2srgb'));
 
 textla = {'All', '50', '25', '75'};
+%%
 % for t=1:size(angles,3);
 % for j=1:4
 % figure; 
@@ -113,10 +116,10 @@ textla = {'All', '50', '25', '75'};
 % end
 % end
 
-
+%%
 % colorsprev = [0 0 1; 0.5 0.5 0.5; 0.25 0.25 0.25; 0.75 0.75 0.75];
-
-% colorEcc = jet(18);
+% 
+% colorEcc = autumn(18);
 % 
 % for t=1:size(angles,3);
 % for j=1:4
@@ -125,7 +128,7 @@ textla = {'All', '50', '25', '75'};
 %     h = polar(deg2rad(i-1),10,'.'); hold on;
 %     set(h,'MarkerSize',40,'Color',colors(i,:));
 % end
-% colorslines = lines(4);
+% colorslines = lines(4); 
 % 
 % h = polar(deg2rad(0:360),interp1(hue,angles(j,:,t),0:360,'pchip')); hold on
 % set(h,'LineWidth',3,'Color',colorslines(j,:));
@@ -149,7 +152,7 @@ textla = {'All', '50', '25', '75'};
 % end
 % end
 
-
+%%
 % % h = polar(deg2rad(0:360),ParticipantAngles(2,:),'r');
 % % set(h,'LineWidth',2);
 % set(gca,'FontSize',15);
@@ -195,11 +198,11 @@ textla = {'All', '50', '25', '75'};
 % %%
 % hgexport(gcf,[nameExp 'Time.eps']);
 
-
+%%
 % for i=1:4
 % checktime = timetaken(i,:,:,:);
 % for j=1:4
-% plottime(i,j) = mean(checktime(previous(i,:,:,:)==j));    
+% plottime(i,j) = median(checktime(previous(i,:,:,:)==j)); 
 % end
 % end
 % plottime = plottime([1 3 2 4],[1 3 2 4]);
@@ -207,16 +210,59 @@ textla = {'All', '50', '25', '75'};
 % legend('All','25','50','75','Location','NorthWest');
 % set(gca,'XTick',[1;2;3;4],'XTickLabel',['All';'25 ';'50 ';'75 '],'XLim',[0.8 4.2],'FontSize',15);
 % xlabel('Previous L^*','FontSize',15);
-% ylabel('Average Time','FontSize',15);
+% ylabel('Median Time','FontSize',15);
+% title('Adaptation time','FontSize',20);
 % hgexport(gcf,'ResultsFigures/AdaptationRepresent.eps');
+%%
+% for i=1:4
+% checktime = totalreported(i,:,:,:);
+% for j=1:4
+% plottime(i,j) = mean(checktime(previous(i,:,:,:)==j)); 
+% end
+% end
+% plottime = plottime([1 3 2 4],[1 3 2 4]);
+% plot(plottime','-o','LineWidth',3,'MarkerSize',10);
+% legend('All','25','50','75','Location','NorthEast');
+% set(gca,'XTick',[1;2;3;4],'XTickLabel',['All';'25 ';'50 ';'75 '],'XLim',[0.8 4.2],'FontSize',15);
+% xlabel('Previous L^*','FontSize',15);
+% ylabel('Average # of Reported','FontSize',15);
+% title('Adaptation reported','FontSize',20);
+% hgexport(gcf,'ResultsFigures/AdaptationRepresentReported.eps');
 
+% %%
+% EYES = sum(A(4:6,:,:,:),1);
+% CHROMA = A(1,:,:,:);
+% ECCEN = A(2,:,:,:);
+% REPO = A(3,:,:,:);
+% for i=1:max(EYES(:));
+% ploteyes(i) = mean(ECCEN(EYES==i.*REPO==1));
+% plotchrom(i) = mean(CHROMA(EYES==i.*REPO==1));
+% end
+% [ax,h1,h2] = plotyy(1:8,ploteyes,1:8,plotchrom);
+% set(h1,'Marker','o','LineWidth',3,'MarkerSize',10);
+% set(h2,'Marker','o','LineWidth',3,'MarkerSize',10);
+% set(ax,'FontSize',15);
+% xlabel('Detection order','FontSize',15);
+% ylabel(ax(1),'Avarage eccentricity (visual angles)','FontSize',15);
+% ylabel(ax(2),'Chroma of patches fixated','FontSize',15);
+% title('Detection order only reported A','FontSize',20);
+% hgexport(gcf,'ResultsFigures/EccentrictyAveragesReportedA.eps');
+
+%%
 EYES = sum(A(4:6,:,:,:),1);
+CHROMA = A(1,:,:,:);
 ECCEN = A(2,:,:,:);
+REPO = A(3,:,:,:);
 for i=1:max(EYES(:));
 ploteyes(i) = mean(ECCEN(EYES==i));
+plotchrom(i) = mean(CHROMA(EYES==i));
 end
-plot(ploteyes,'-o','LineWidth',3,'MarkerSize',10);
-set(gca,'FontSize',15);
+[ax,h1,h2] = plotyy(1:8,ploteyes,1:8,plotchrom);
+set(h1,'Marker','o','LineWidth',3,'MarkerSize',10);
+set(h2,'Marker','o','LineWidth',3,'MarkerSize',10);
+set(ax,'FontSize',15);
 xlabel('Detection order','FontSize',15);
-ylabel('Avarage eccentricity (visual angles)','FontSize',15);
-hgexport(gcf,'ResultsFigures/EccentrictyAverages.eps');
+ylabel(ax(1),'Avarage eccentricity (visual angles)','FontSize',15);
+ylabel(ax(2),'Chroma of patches fixated','FontSize',15);
+title('Detection order C','FontSize',20);
+hgexport(gcf,'ResultsFigures/EccentrictyAveragesC.eps');
