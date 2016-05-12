@@ -1,5 +1,5 @@
 clear all
-% close all
+close all
 
 addpath('Profiles and Colors/');
 Moni = iccread('ColorNavSergiExp.icc');
@@ -8,15 +8,17 @@ ProfLab = iccread('Generic Lab Profile.icc');
 Lab2Moni = makecform('icc', ProfLab, Moni);
 Moni2Lab = makecform('icc', Moni, ProfLab);
 
+
 pix2deg = 49;
 
-nameExp = '011';
+nameExp = '025';
+
+
 
 load(['EXPERIMENTFILES/' nameExp '.mat']);
 load(['ImportET/ET_' nameExp '.mat']);
 
 %%
-
 sele = [1:9:648 2:9:648 3:9:648];
 permu = info(1).Permutation;
 
@@ -68,13 +70,13 @@ for j=1:8
     imChroma(loc) = newChrom(SorChroma==j);
 end
 
-if i==0
+if i==0||i==1||i==2||i==3
 
-figure; imshow(imS);
-figure;
+figure(1); imshow(imS);
+figure(2);
 for j=1:size(eFix,1);
     
-    imshow(imChroma,[]); hold on
+    imshow(insertShape(imChroma,'FilledCircle',[str2num(cell2mat(eFix(j,12)))-Xresol str2num(cell2mat(eFix(j,13))) 50],'Color','white','Opacity',1),[]); hold on
     colormap(hot),colorbar;
         
     plot(str2num(cell2mat(eFix(j,12)))-Xresol,...
@@ -88,13 +90,14 @@ end
 end
 
 ptsFix = [];
+outoftotal = NaN(1,24);
+outoftotal(ismember(CHROMAS,unique(imChroma))) = 0;
 for j=1:size(eFix,1);
-    
     x = floor(str2num(cell2mat(eFix(j,12)))-Xresol);
     y = floor(str2num(cell2mat(eFix(j,13))));
     disx = floor(str2num(cell2mat(eFix(j,17))));
     disy = floor(str2num(cell2mat(eFix(j,18))));
-    diambig = 200;
+    diambig = 75;
     if x-diambig>0&&x+diambig<=1440&&y-diambig>0&&y+diambig<=1440
     fixi = zeros(size(imChroma));
     fixi = insertShape(fixi,'FilledCircle',[x y diambig],'Color','white','Opacity',1);
@@ -105,27 +108,27 @@ for j=1:size(eFix,1);
         area = []; centroid=[];
         for t=1:length(STATS);
             area(t) = STATS(t).Area;
-            centroid(t,:) = floor(STATS(t).Centroid);
-        end
-        [~,bArea] = sort(area,'descend');
-        ptsFix = [ptsFix imChroma(centroid(bArea(1),2),centroid(bArea(1),1))];
-        if length(ptsFix)==1
-            frstPatch = ptsFix(1);
-            frstTime = cell2mat(eFix(i,11));
+            centroidcenter = floor(STATS(t).Centroid);
+            ptsFix = [ptsFix imChroma(centroidcenter(2),centroidcenter(1))];
+            fixloc = find(CHROMAS==imChroma(centroidcenter(2),centroidcenter(1)));
+            if outoftotal(fixloc)==0, outoftotal(fixloc) = max(outoftotal)+1; end
         end
     end
     end
 end
 
-[~,IP] = find(permu==I);
 
+frstPatch = ptsFix(1);
+frstTime = cell2mat(eFix(i,11));
+[~,IP] = find(permu==I);
 FinalInfo(i).nFixations = size(eFix,1);
 FinalInfo(i).nSaccades = size(eSac,1);
 FinalInfo(i).ChromaValues = unique(imChroma);
 FinalInfo(i).EccenMag = lenCent/pix2deg;
 FinalInfo(i).EccenAng = angCent;
 FinalInfo(i).PointsFix = unique(ptsFix);
-FinalInfo(i).FixOfTotal = double(ismember(CHROMAS,unique(ptsFix)));
+FinalInfo(i).PointsFixOrder = ptsFix;
+FinalInfo(i).FixOfTotal = outoftotal;
 FinalInfo(i).FirstFix = frstPatch;
 FinalInfo(i).FirstFixTime = frstTime;
 if IP>1
@@ -133,13 +136,18 @@ FinalInfo(i).PreviousL = info(sele(permu(IP-1))).L_Stimuli;
 FinalInfo(i).PreviousHue = info(sele(permu(IP-1))).Hue_Stimuli;
 end
 FinalInfo(i).Position = IP;
-end 
-
+end
 %%
 A(1,:) = CHROMAS;
 A(2,:) = zeros(1,24);
+for i=1:3
+    for j=1:8
+        A(2,CHROMAS==FinalInfo(i).ChromaValues(j+1)) = FinalInfo(i).EccenMag(j);
+    end
+end
+A(3,:) = zeros(1,24);
 sumat = FinalInfo(1).LastSeen+FinalInfo(2).LastSeen+FinalInfo(3).LastSeen;
-A(2,end-sumat+1:end) = 1;
-A(3,:) = FinalInfo(1).FixOfTotal;
-A(4,:) = FinalInfo(2).FixOfTotal;
-A(5,:) = FinalInfo(3).FixOfTotal;
+A(3,end-sumat+1:end) = 1;
+A(4,:) = FinalInfo(1).FixOfTotal;
+A(5,:) = FinalInfo(2).FixOfTotal;
+A(6,:) = FinalInfo(3).FixOfTotal;

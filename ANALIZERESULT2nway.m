@@ -1,9 +1,24 @@
 clear all
 close all
 
-nameExp = '003';
+load('A.mat');
+% A = B;
+
+expnames = [11,12,14,15,16,18,19,20,21,22,24,25];
+sele = [1:9:648 2:9:648 3:9:648];
+
+previous = zeros(4,18,3,12);
+timetaken = zeros(4,18,3,12);
+
+
+for nex = 1:length(expnames);
+
+nameExp = sprintf('%03d',expnames(nex));
 
 load(['EXPERIMENTFILES/' nameExp '.mat']);
+% load(['ImportET/ET_' nameExp '.mat']);
+
+permu = info(1).Permutation;
 
 iter = 1;
 for i=1:4
@@ -12,27 +27,43 @@ for i=1:4
             means = [];
             mixtures = [];
             total = 0;
+            
+%             A(:,:,(i-1)*18+j,nex) = eyeMatrix(nameExp, info,EyeEvents,iter:iter+2);
             for t=1:3
                 
                 for l = 1:8
-                    
-                    means = [means info(iter).means(l).mean(2)];
-                    mixtures = [mixtures info(iter).means(l).MEANMIXTURE];
-                    
+                    means = [means (info(iter).means(l).MEANMIXTURE+1)*30-14];
                 end
                 
+                [seleI] = find(sele==iter);
+                [permI] = find(permu==seleI);
+                if permI~=1
+                    if strcmp(info(sele(permu(permI-1))).L_Stimuli,'All');
+                        previous(i,j,t,nex) = 1;
+                    elseif strcmp(info(sele(permu(permI-1))).L_Stimuli,'50');
+                        previous(i,j,t,nex) = 2;
+                    elseif strcmp(info(sele(permu(permI-1))).L_Stimuli,'25');
+                        previous(i,j,t,nex) = 3;
+                    elseif strcmp(info(sele(permu(permI-1))).L_Stimuli,'75');
+                        previous(i,j,t,nex) = 4;
+                    end
+                else
+                previous(i,j,t,nex) = 1;
+                end
+                timetaken(i,j,t,nex) = info(iter).Time;
                 total = total+info(iter).LastSeen;
                 iter = iter+1;
                 
                 if t==3
                     iter = iter+6;
                 end
+                
                  
             end
         
             B = sort(means,'descend');
-            C = sort(mixtures,'descend');
-            result(i,j,n) = C(total);    
+            result(i,j,n) = B(total); 
+            
             
         end
     end
@@ -45,23 +76,78 @@ hue = [0 10:20:350 360];
 [X,Y,Z] = meshgrid(hue,1:4,1:1); %Change last for adapt
 [Xq,Yq,Zq] = meshgrid(0:360,1:4,1:1); %Change last for adapt
 
-angles = [mean([result(:,1) result(:,end)],2) result mean([result(:,1) result(:,end)],2)];
+angles(:,:,nex) = [mean([result(:,1) result(:,end)],2) result mean([result(:,1) result(:,end)],2)];
 % angles = interp2(X,Y,angles,Xq,Yq,'spline');
 
+end
+
+% save('C.mat','A')
+
+anglesM=mean(angles,3);
+anglesMstd=std(angles,[],3);
+
+CHROMAS = A(1,:,1,1);
 [a,b] = pol2cart(deg2rad(0:360),100*ones(1,361));
 colors = applycform([50*ones(1,361); a; b]',makecform('lab2srgb'));
 
-for j=1:4
-figure; 
-for i=1:361;
-    h = polar(deg2rad(i-1),0,'.'); hold on;
-    set(h,'MarkerSize',40,'Color',colors(i,:));
-end
-colorslines = lines(4);
+textla = {'All', '50', '25', '75'};
+% for t=1:size(angles,3);
+% for j=1:4
+% figure; 
+% for i=1:361;
+%     h = polar(deg2rad(i-1),10,'.'); hold on;
+%     set(h,'MarkerSize',40,'Color',colors(i,:));
+% end
+% colorslines = lines(4);
+% 
+% h = polar(deg2rad(0:360),interp1(hue,anglesM(j,:),0:360,'pchip')); hold on
+% set(h,'LineWidth',3,'Color',colorslines(j,:));
+% 
+% h = polar(deg2rad(0:360),interp1(hue,anglesM(j,:)-anglesMstd(j,:),0:360,'pchip')); hold on
+% set(h,'LineWidth',2,'Color',colorslines(j,:),'LineStyle','--');
+% 
+% h = polar(deg2rad(0:360),interp1(hue,anglesM(j,:)+anglesMstd(j,:),0:360,'pchip')); hold on
+% set(h,'LineWidth',2,'Color',colorslines(j,:),'LineStyle','--');
+% 
+% hgexport(gcf,['ResultsFigures/Reported/Mean_' textla{j} '.eps']);
+% end
+% end
 
-h = polar(deg2rad(hue),angles(j,:)); hold on
-set(h,'LineWidth',3,'Color',colorslines(j,:));
-end
+
+% colorsprev = [0 0 1; 0.5 0.5 0.5; 0.25 0.25 0.25; 0.75 0.75 0.75];
+
+% colorEcc = jet(18);
+% 
+% for t=1:size(angles,3);
+% for j=1:4
+% figure; 
+% for i=1:361;
+%     h = polar(deg2rad(i-1),10,'.'); hold on;
+%     set(h,'MarkerSize',40,'Color',colors(i,:));
+% end
+% colorslines = lines(4);
+% 
+% h = polar(deg2rad(0:360),interp1(hue,angles(j,:,t),0:360,'pchip')); hold on
+% set(h,'LineWidth',3,'Color',colorslines(j,:));
+% 
+% for i=1:18
+%     eyet = A(:,:,(j-1)*18+i,t);
+%     [~, firstcol] = find(eyet(4:6,:)==1);
+% %     h = polar(deg2rad(repmat(hue(i+1),1,size(firstcol))),CHROMAS(firstcol),'ko'); hold on
+%     for n = 1:3
+%         if numel(firstcol)>=n
+%         h(n) = polar(deg2rad(hue(i+1)),CHROMAS(firstcol(n)),'.'); hold on;
+%         set(h(n),'MarkerSize',20,'Color',colorEcc(ceil(A(2,firstcol(n),(j-1)*18+i,t)),:));
+%         end
+%     end
+% end
+% colormap(colorEcc)
+% colorBar = colorbar('eastoutside');
+% set(colorBar,'Position',get(colorBar,'Position') + [0.08 0 0 0]);
+% hgexport(gcf,['ResultsFigures/Reported/' textla{j} '_' sprintf('%03d',expnames(t)) '.eps']);
+% close all
+% end
+% end
 
 
 % % h = polar(deg2rad(0:360),ParticipantAngles(2,:),'r');
@@ -108,3 +194,29 @@ end
 % 
 % %%
 % hgexport(gcf,[nameExp 'Time.eps']);
+
+
+% for i=1:4
+% checktime = timetaken(i,:,:,:);
+% for j=1:4
+% plottime(i,j) = mean(checktime(previous(i,:,:,:)==j));    
+% end
+% end
+% plottime = plottime([1 3 2 4],[1 3 2 4]);
+% plot(plottime','-o','LineWidth',3,'MarkerSize',10);
+% legend('All','25','50','75','Location','NorthWest');
+% set(gca,'XTick',[1;2;3;4],'XTickLabel',['All';'25 ';'50 ';'75 '],'XLim',[0.8 4.2],'FontSize',15);
+% xlabel('Previous L^*','FontSize',15);
+% ylabel('Average Time','FontSize',15);
+% hgexport(gcf,'ResultsFigures/AdaptationRepresent.eps');
+
+EYES = sum(A(4:6,:,:,:),1);
+ECCEN = A(2,:,:,:);
+for i=1:max(EYES(:));
+ploteyes(i) = mean(ECCEN(EYES==i));
+end
+plot(ploteyes,'-o','LineWidth',3,'MarkerSize',10);
+set(gca,'FontSize',15);
+xlabel('Detection order','FontSize',15);
+ylabel('Avarage eccentricity (visual angles)','FontSize',15);
+hgexport(gcf,'ResultsFigures/EccentrictyAverages.eps');

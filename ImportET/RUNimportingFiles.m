@@ -1,7 +1,7 @@
 clear all
 close all
 
-nameExp = '021';
+nameExp = '025';
 
 EyeEvents = importfileEvents(['/Volumes/myshares/Sergis share/SergiExportData/'...
     nameExp '.txt']);
