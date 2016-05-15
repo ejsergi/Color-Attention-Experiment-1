@@ -1,7 +1,7 @@
 clear all
 close all
 
-load('C.mat');
+load('D.mat');
 % A = B;
 
 expnames = [11,12,14,15,16,18,19,20,21,22,24,25];
@@ -83,7 +83,7 @@ angles(:,:,nex) = [mean([result(:,1) result(:,end)],2) result mean([result(:,1) 
 
 end
 
-% save('C.mat','A')
+% save('D.mat','A')
 
 anglesM=mean(angles,3);
 anglesMstd=std(angles,[],3);
@@ -119,7 +119,7 @@ textla = {'All', '50', '25', '75'};
 %%
 % colorsprev = [0 0 1; 0.5 0.5 0.5; 0.25 0.25 0.25; 0.75 0.75 0.75];
 % 
-% colorEcc = autumn(18);
+% colorEcc = parula(18);
 % 
 % for t=1:size(angles,3);
 % for j=1:4
@@ -198,7 +198,7 @@ textla = {'All', '50', '25', '75'};
 % %%
 % hgexport(gcf,[nameExp 'Time.eps']);
 
-%%
+%% Adaptation time
 % for i=1:4
 % checktime = timetaken(i,:,:,:);
 % for j=1:4
@@ -212,8 +212,9 @@ textla = {'All', '50', '25', '75'};
 % xlabel('Previous L^*','FontSize',15);
 % ylabel('Median Time','FontSize',15);
 % title('Adaptation time','FontSize',20);
-% hgexport(gcf,'ResultsFigures/AdaptationRepresent.eps');
-%%
+% hgexport(gcf,'ResultsFigures/AdaptationRepresentTime.eps');
+
+%% Adaptation reported
 % for i=1:4
 % checktime = totalreported(i,:,:,:);
 % for j=1:4
@@ -229,7 +230,7 @@ textla = {'All', '50', '25', '75'};
 % title('Adaptation reported','FontSize',20);
 % hgexport(gcf,'ResultsFigures/AdaptationRepresentReported.eps');
 
-% %%
+%% Detection order only reported
 % EYES = sum(A(4:6,:,:,:),1);
 % CHROMA = A(1,:,:,:);
 % ECCEN = A(2,:,:,:);
@@ -245,24 +246,94 @@ textla = {'All', '50', '25', '75'};
 % xlabel('Detection order','FontSize',15);
 % ylabel(ax(1),'Avarage eccentricity (visual angles)','FontSize',15);
 % ylabel(ax(2),'Chroma of patches fixated','FontSize',15);
-% title('Detection order only reported A','FontSize',20);
-% hgexport(gcf,'ResultsFigures/EccentrictyAveragesReportedA.eps');
+% title('Detection order only reported C','FontSize',20);
+% hgexport(gcf,'ResultsFigures/EccentrictyAveragesReportedC.eps');
 
-%%
-EYES = sum(A(4:6,:,:,:),1);
-CHROMA = A(1,:,:,:);
-ECCEN = A(2,:,:,:);
-REPO = A(3,:,:,:);
-for i=1:max(EYES(:));
-ploteyes(i) = mean(ECCEN(EYES==i));
-plotchrom(i) = mean(CHROMA(EYES==i));
-end
-[ax,h1,h2] = plotyy(1:8,ploteyes,1:8,plotchrom);
-set(h1,'Marker','o','LineWidth',3,'MarkerSize',10);
-set(h2,'Marker','o','LineWidth',3,'MarkerSize',10);
-set(ax,'FontSize',15);
-xlabel('Detection order','FontSize',15);
-ylabel(ax(1),'Avarage eccentricity (visual angles)','FontSize',15);
-ylabel(ax(2),'Chroma of patches fixated','FontSize',15);
-title('Detection order C','FontSize',20);
-hgexport(gcf,'ResultsFigures/EccentrictyAveragesC.eps');
+%% Detection order
+% EYES = sum(A(4:6,:,:,:),1);
+% CHROMA = A(1,:,:,:);
+% ECCEN = A(2,:,:,:);
+% REPO = A(3,:,:,:);
+% for i=1:max(EYES(:));
+% ploteyes(i) = mean(ECCEN(EYES==i));
+% plotchrom(i) = mean(CHROMA(EYES==i));
+% end
+% [ax,h1,h2] = plotyy(1:8,ploteyes,1:8,plotchrom);
+% set(h1,'Marker','o','LineWidth',3,'MarkerSize',10);
+% set(h2,'Marker','o','LineWidth',3,'MarkerSize',10);
+% set(ax,'FontSize',15);
+% xlabel('Detection order','FontSize',15);
+% ylabel(ax(1),'Avarage eccentricity (visual angles)','FontSize',15);
+% ylabel(ax(2),'Chroma of patches fixated','FontSize',15);
+% title('Detection order C','FontSize',20);
+% hgexport(gcf,'ResultsFigures/EccentrictyAveragesC.eps');
+
+%% Prob of Fixated (AVERAGE)
+% CHROMA = A(1,:,1,1);
+% probaFix = zeros(1,24);
+% reported = zeros(1,24);
+% for i=1:24
+%     numfix = double(A(4:6,i,:,:)>=1);
+%     numRep = double(A(3,i,:,:)==1);
+%     probaFix(i) = sum(numfix(:))/(72*12);
+%     reported(i) = sum(numRep(:))/(72*12);
+% end
+% map = winter(256);
+% nCHROMA = min(CHROMA):0.01:max(CHROMA);
+% probaFix = interp1(CHROMA,probaFix,nCHROMA,'linear');
+% reported = interp1(CHROMA,reported,nCHROMA,'pchip');
+% figure; hold on
+% for i=1:length(probaFix)
+%     plot(nCHROMA(i),probaFix(i),'.','Color',map(ceil(reported(i)*255)+1,:)...
+%         ,'MarkerSize',15)
+% end
+% colormap(map);
+% colbar = colorbar('southoutside');
+% set(colbar,'Ticks',[0;1],'TickLabels',['No reported';'Reported   ']);
+% xlabel('Chroma');
+% ylabel('Probability of being fixated');
+% set(gca,'FontSize',15);
+% title('Prob of 1st Fixation (Average hues and observers)');
+% hgexport(gcf,'ResultsFigures/ProbFixation/AverageAll.eps');
+
+%% Prob of Fixated (By observers)
+% CHROMA = A(1,:,1,1);
+% 
+% for j = 1:12
+% probaFix = zeros(1,24);
+% reported = zeros(1,24);
+% for i=1:24
+%     numfix = double(A(4:6,i,:,j)>=1);
+%     numRep = double(A(3,i,:,j)==1);
+%     probaFix(i) = sum(numfix(:))/(72);
+%     reported(i) = sum(numRep(:))/(72);
+% end
+% map = winter(256);
+% nCHROMA = min(CHROMA):0.01:max(CHROMA);
+% probaFix = interp1(CHROMA,probaFix,nCHROMA,'pchip');
+% reported = interp1(CHROMA,reported,nCHROMA,'pchip');
+% figure; hold on
+% for i=1:length(probaFix)
+%     plot(nCHROMA(i),probaFix(i),'.','Color',map(ceil(reported(i)*255)+1,:)...
+%         ,'MarkerSize',15)
+% end
+% colormap(map);
+% colbar = colorbar('southoutside');
+% set(colbar,'Ticks',[0;1],'TickLabels',['No reported';'Reported   ']);
+% xlabel('Chroma');
+% ylabel('Probability of being fixated');
+% set(gca,'FontSize',15);
+% title(['Prob of Fixation (Observer ' sprintf('%03d',j) ')']);
+% hgexport(gcf,['ResultsFigures/ProbFixation/Observer/Observer_' ...
+%     sprintf('%03d',j) '.eps']);
+% close all
+% end
+
+%% EXCENTRICITY VS CHROMA
+CHROMAS = A(1,:,1,1);
+ECCS = reshape(A(2,:,:,:),1,24,[]);
+plot(CHROMAS,mean(ECCS,3),'LineWidth',3)
+axis([1 10 2 15]), xlabel('Chroma'), ylabel('Eccentricity in visual degree');
+title('ECCENTRICITY VS CHROMA');
+set(gca,'FontSize',15);
+hgexport(gcf,'ResultsFigures/EccVsChroma.eps');

@@ -67,10 +67,11 @@ lenCent = lenCent(SorChroma);
 angCent = angCent(SorChroma);
 for j=1:8
     loc = (imL==j);
+    loc = imdilate(loc,strel('disk',floor(newChrom(SorChroma==j)*10)));
     imChroma(loc) = newChrom(SorChroma==j);
 end
 
-if i==3%||i==1||i==2||i==3
+if i==0||i==1||i==2||i==3
 
 figure(1); imshow(imS);
 figure(2);

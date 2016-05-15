@@ -55,6 +55,7 @@ newChrom = sort((realChroma+1)*30-14);
 lenCent = lenCent(SorChroma);
 for j=1:8
     loc = (imL==j);
+    loc = imdilate(loc,strel('disk',round(newChrom(SorChroma==j)*10)));
     imChroma(loc) = newChrom(SorChroma==j);
 end
 
