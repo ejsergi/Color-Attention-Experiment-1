@@ -43,10 +43,10 @@ chromaval=sort(chromaval);
 Ai = A(:,:,floor((i+2)/3),nex);
 Li = L(:,:,floor((i+2)/3),nex);
 Ti = T(:,:,floor((i+2)/3),nex);
-LPatch = mod((i+2),3)+2;
 for j=1:8
     tablepos = tablepos+1;
     posPatch = find(Ai(1,:)==chromaval(j));
+    LPatch = find(Li(2:4,posPatch)>0);
     
     FINALTABLE{tablepos,1} = experimentname;
     FINALTABLE{tablepos,2} = partID{nex};
@@ -60,9 +60,9 @@ for j=1:8
     FINALTABLE{tablepos,8} = info(sele(i)).Hue_Stimuli;
     FINALTABLE{tablepos,9} = chromaval(j);
     FINALTABLE{tablepos,10} = Ai(2,posPatch);
-    FINALTABLE{tablepos,11} = j>(8-info(sele(i)).LastSeen);
+    FINALTABLE{tablepos,11} = Ai(3,posPatch);
     FINALTABLE{tablepos,12} = info(sele(i)).LastSeen;
-    FINALTABLE{tablepos,13} = Ai(LPatch,posPatch)>0;
+    FINALTABLE{tablepos,13} = info(sele(i)).LastSeen;
     FINALTABLE{tablepos,14} = sum(Li(2:4,posPatch));
     FINALTABLE{tablepos,15} = sum(Li(LPatch,:),2);
     FINALTABLE{tablepos,16} = sum(Ai(4:6,posPatch));
