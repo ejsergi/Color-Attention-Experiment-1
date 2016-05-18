@@ -84,7 +84,7 @@ angles(:,:,nex) = [mean([result(:,1) result(:,end)],2) result mean([result(:,1) 
 
 end
 
-save('F3_100.mat','A','L','T')
+save('F3_BNY.mat','A','L','T')
 
 anglesM=mean(angles,3);
 anglesMstd=std(angles,[],3);
@@ -686,6 +686,7 @@ textla = {'All', '50', '25', '75'};
 % hue = 10:20:350;
 % PFNR = [];
 % PFNRT = [];
+% DT = [];
 % for j=1:4
 % for i=1:18
 % PFNR(i,j) = but(:,:,18*(j-1)+(i),:);
@@ -702,9 +703,29 @@ textla = {'All', '50', '25', '75'};
 % DT = [(DT(1)+DT(end))/2; DT; (DT(1)+DT(end))/2];
 % 
 % figure;
+% 
+% h = plot((0:360),interp1([0 hue 360],DT ,0:360,'pchip')); hold on
+% set(h,'LineWidth',3);
+% h = plot((0:360),interp1([0 hue 360],PFNRT ,0:360,'pchip')); hold on
+% set(h,'LineWidth',3);
+% h = plot((0:360),interp1([0 hue 360],PFNR ,0:360,'pchip')); hold on
+% set(h,'LineWidth',3);
+% 
+% for i=1:361;
+%     h = plot((i-1),0.8,'.'); hold on;
+%     set(h,'MarkerSize',40,'Color',colors(i,:));
+% end
+% 
+% figure;
+% 
 % h = polar(deg2rad(0:360),interp1([0 hue 360],DT ,0:360,'pchip')); hold on
 % set(h,'LineWidth',3);
 % h = polar(deg2rad(0:360),interp1([0 hue 360],PFNRT ,0:360,'pchip')); hold on
 % set(h,'LineWidth',3);
 % h = polar(deg2rad(0:360),interp1([0 hue 360],PFNR ,0:360,'pchip')); hold on
 % set(h,'LineWidth',3);
+% 
+% for i=1:361;
+%     h = polar(deg2rad(i-1),0.8,'.'); hold on;
+%     set(h,'MarkerSize',40,'Color',colors(i,:));
+% end

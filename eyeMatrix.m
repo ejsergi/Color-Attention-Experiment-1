@@ -48,11 +48,12 @@ for j=1:8
     center = STATS.Centroid;
     lenCent(j) = sqrt((center(1)-720).^2+(center(2)-720).^2);
     angCent(j) = wrapTo360(atan2d(center(1)-720,center(2)-720));
-    
+    PatchCenter(j,:) = [center(1) center(2)];
 end
 [~,SorChroma] = sort(ChromaVal);
 newChrom = sort((realChroma+1)*30-14);
 lenCent = lenCent(SorChroma);
+PatchCenter = PatchCenter(SorChroma,:);
 for j=1:8
     loc = (imL==j);
     loc = imdilate(loc,strel('disk',round(newChrom(SorChroma==j)*12)));
@@ -63,9 +64,13 @@ ptsFix = [];
 outoftotal = zeros(1,24);
 numberoftotal = zeros(1,24);
 timeoftotal = zeros(1,24);
+ecceoftotal = zeros(1,24);
+angoftotal = zeros(1,24);
 reportoftotal(i,:) = zeros(1,24);
 [~,~,interse] = intersect(newChrom,CHROMAS);
 reportoftotal(i,interse(end-info(check(i)).LastSeen+1:end))=1;
+PatchCenterT = zeros(24,2);
+PatchCenterT(interse,:) = PatchCenter;
 
 for j=1:size(eFix,1);
     x = floor(str2num(cell2mat(eFix(j,12)))-Xresol);
@@ -86,10 +91,16 @@ for j=1:size(eFix,1);
             ptsFix = [ptsFix imChroma(centroidcenter(2),centroidcenter(1))];
             fixloc = find(CHROMAS==imChroma(centroidcenter(2),centroidcenter(1)));
             if outoftotal(fixloc)==0, outoftotal(fixloc) = max(outoftotal)+1; end
-            if numberoftotal(fixloc)>=0, numberoftotal(fixloc) = ...
-                    numberoftotal(fixloc)+1; end
-            if timeoftotal(fixloc)>=0, timeoftotal(fixloc) = timeoftotal(fixloc)...
-                    + cell2mat(eFix(j,11)); end
+            numberoftotal(fixloc) = numberoftotal(fixloc)+1;
+            timeoftotal(fixloc) = timeoftotal(fixloc) + cell2mat(eFix(j,11)); 
+            if ecceoftotal(fixloc)==0, ecceoftotal(fixloc)=100; end
+            eccdistanceofpach = sqrt((PatchCenter(fixloc,1)-x).^2+...
+                (PatchCenter(fixloc,2)-y).^2);
+            [ecceoftotal(fixloc),inang] = min([ecceoftotal(fixloc) eccdistanceofpach]);
+            if inang==2
+            angoftotal(fixloc) = wrapTo360(atan2d(PatchCenter(fixloc,1)-x,...
+                PatchCenter(fixloc,2)-y)); 
+            end
         end
     end
     end
@@ -97,12 +108,16 @@ end
 
 ChromaValues(i,:) = unique(imChroma);
 EccenMag(i,:) = lenCent/pix2deg;
+AngMag(i,:) = angCent;
 FixOfTotal(i,:) = outoftotal;
 NumOfTotal(i,:) = numberoftotal;
 TimeOfTotal(i,:) = timeoftotal;
-ReportTotal = sum(reportoftotal,1);
-
+EcceTotal(i,:) = ecceoftotal;
+AngTotal(i,:) = angoftotal;
 end
+ReportTotal = sum(reportoftotal,1);
+EcceTotal = sum(EcceTotal,1);
+AngTotal = sum(AngTotal,1);
 %%
 A(1,:) = CHROMAS;
 L(1,:) = CHROMAS;
@@ -117,4 +132,11 @@ A(3,:) = ReportTotal;
 A(4:6,:) = FixOfTotal;
 L(2:4,:) = NumOfTotal;
 T(2:4,:) = TimeOfTotal;
+for i=1:3
+    for j=1:8
+        A(5,CHROMAS==ChromaValues(i,j+1)) = AngMag(i,j);       
+    end
+end
+A(6,:) = EcceTotal;
+A(7,:) = AngTotal;
 end
