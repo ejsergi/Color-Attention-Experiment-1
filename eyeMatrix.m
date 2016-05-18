@@ -63,12 +63,16 @@ ptsFix = [];
 outoftotal = zeros(1,24);
 numberoftotal = zeros(1,24);
 timeoftotal = zeros(1,24);
+reportoftotal(i,:) = zeros(1,24);
+[~,~,interse] = intersect(newChrom,CHROMAS);
+reportoftotal(i,interse(end-info(check(i)).LastSeen+1:end))=1;
+
 for j=1:size(eFix,1);
     x = floor(str2num(cell2mat(eFix(j,12)))-Xresol);
     y = floor(str2num(cell2mat(eFix(j,13))));
     disx = floor(str2num(cell2mat(eFix(j,17))));
     disy = floor(str2num(cell2mat(eFix(j,18))));
-    diambig = 50;
+    diambig = 100;
     if x-diambig>0&&x+diambig<=1440&&y-diambig>0&&y+diambig<=1440
     fixi = zeros(size(imChroma));
     fixi = insertShape(fixi,'FilledCircle',[x y diambig],'Color','white','Opacity',1);
@@ -96,6 +100,7 @@ EccenMag(i,:) = lenCent/pix2deg;
 FixOfTotal(i,:) = outoftotal;
 NumOfTotal(i,:) = numberoftotal;
 TimeOfTotal(i,:) = timeoftotal;
+ReportTotal = sum(reportoftotal,1);
 
 end
 %%
@@ -108,9 +113,7 @@ for i=1:3
         A(2,CHROMAS==ChromaValues(i,j+1)) = EccenMag(i,j);       
     end
 end
-A(3,:) = zeros(1,24);
-sumat = info(check(1)).LastSeen+info(check(2)).LastSeen+info(check(3)).LastSeen;
-A(3,end-sumat+1:end) = 1;
+A(3,:) = ReportTotal;
 A(4:6,:) = FixOfTotal;
 L(2:4,:) = NumOfTotal;
 T(2:4,:) = TimeOfTotal;

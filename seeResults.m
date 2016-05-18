@@ -11,7 +11,7 @@ Moni2Lab = makecform('icc', Moni, ProfLab);
 
 pix2deg = 49;
 
-nameExp = '020';
+nameExp = '025';
 
 
 
@@ -22,7 +22,7 @@ load(['ImportET/ET_' nameExp '.mat']);
 sele = [1:9:648 2:9:648 3:9:648];
 permu = info(1).Permutation;
 
-check = 361:363;
+check = 1:3;
 Xresol = (2560-1440)/2;
 
 CHROMAS = ((-0.49:0.0125:-0.2)+1)*30-14;
@@ -67,7 +67,7 @@ lenCent = lenCent(SorChroma);
 angCent = angCent(SorChroma);
 for j=1:8
     loc = (imL==j);
-    loc = imdilate(loc,strel('disk',floor(newChrom(SorChroma==j)*10)));
+    loc = imdilate(loc,strel('disk',floor(newChrom(SorChroma==j)*12)));
     imChroma(loc) = newChrom(SorChroma==j);
 end
 
