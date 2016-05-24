@@ -38,6 +38,7 @@ bIm = LabIm(:,:,3);
 imL = bwlabel(imLa);
 
 imChroma = zeros(size(imL));
+imLabel = zeros(size(imL));
 
 for j=1:8
     
@@ -58,6 +59,7 @@ for j=1:8
     loc = (imL==j);
     loc = imdilate(loc,strel('disk',round(newChrom(SorChroma==j)*12)));
     imChroma(loc) = newChrom(SorChroma==j);
+    imLabel(loc) = j;
 end
 
 ptsFix = [];
@@ -80,14 +82,16 @@ for j=1:size(eFix,1);
     diambig = 100;
     if x-diambig>0&&x+diambig<=1440&&y-diambig>0&&y+diambig<=1440
     fixi = zeros(size(imChroma));
-    fixi = insertShape(fixi,'FilledCircle',[x y diambig],'Color','white','Opacity',1);
+    fixi = insertShape(fixi,'FilledCircle',[x y diambig],'Color','white',...
+        'Opacity',1,'SmoothEdges',false);
     fixi = fixi(:,:,1);
-    patFix = imLa.*fixi;
-    STATS = regionprops(logical(patFix),'Centroid');
+    patFix = imLabel.*fixi;
+    STATS = regionprops(patFix,'Centroid');
     if ~isempty(STATS)
         centroid=[];
         for t=1:length(STATS);
             centroidcenter = floor(STATS(t).Centroid);
+            if ~isnan(centroidcenter(1))
             ptsFix = [ptsFix imChroma(centroidcenter(2),centroidcenter(1))];
             fixloc = find(CHROMAS==imChroma(centroidcenter(2),centroidcenter(1)));
             if outoftotal(fixloc)==0, outoftotal(fixloc) = max(outoftotal)+1; end
@@ -100,6 +104,7 @@ for j=1:size(eFix,1);
             if inang==2
             angoftotal(fixloc) = wrapTo360(atan2d(PatchCenterT(fixloc,1)-x,...
                 PatchCenterT(fixloc,2)-y)); 
+            end
             end
         end
     end
@@ -134,9 +139,9 @@ L(2:4,:) = NumOfTotal;
 T(2:4,:) = TimeOfTotal;
 for i=1:3
     for j=1:8
-        A(5,CHROMAS==ChromaValues(i,j+1)) = AngMag(i,j);       
+        A(7,CHROMAS==ChromaValues(i,j+1)) = AngMag(i,j);       
     end
 end
-A(6,:) = EcceTotal;
-A(7,:) = AngTotal;
+A(8,:) = EcceTotal;
+A(9,:) = AngTotal;
 end
