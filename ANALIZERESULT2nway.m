@@ -1,7 +1,7 @@
 clear all
 close all
 
-load('F3_BNY.mat');
+load('F3_BNY1.mat');
 % A = B;
 
 expnames = [11,12,14,15,16,18,19,20,21,22,24,25];
@@ -679,10 +679,11 @@ textla = {'All', '50', '25', '75'};
 
 
 %% THREE THINGS INSIDE SAME PLOT (DETECTION - FIXATION - FIXATION AND NON DETACTION)
+observer = 1:12;
 
-but = sum(sum((1-A(3,:,:,:)).*sum(L(2:4,:,:,:)>0,1),2),4)/(24*4*12);
-butT = sum(sum(sum(L(2:4,:,:,:)>0,1),2),4)/(24*4*12);
-detec = sum(sum(A(3,:,:,:),2),4)/(24*4*12);
+but = sum(sum((1-A(3,:,:,observer)).*sum(L(2:4,:,:,observer)>0,1),2),4)/(24*4*numel(observer));
+butT = sum(sum(sum(L(2:4,:,:,observer)>0,1),2),4)/(24*4*numel(observer));
+detec = sum(sum(A(3,:,:,observer),2),4)/(24*4*numel(observer));
 hue = 10:20:350;
 PFNR = [];
 PFNRT = [];
