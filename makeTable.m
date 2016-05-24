@@ -17,14 +17,17 @@ FINALTABLE{1,7} = 'Preceding L*';
 FINALTABLE{1,8} = 'Hue angle';
 FINALTABLE{1,9} = 'Patch Chroma value';
 FINALTABLE{1,10} = 'Eccentricity';
-FINALTABLE{1,11} = 'Reported';
-FINALTABLE{1,12} = 'Number of reported';
-FINALTABLE{1,13} = 'Fixated';
-FINALTABLE{1,14} = 'Number of fixation per path';
-FINALTABLE{1,15} = 'Total number of fixations per stimulus';
-FINALTABLE{1,16} = 'Order of first fixation on the path';
-FINALTABLE{1,17} = 'Dwell time per patch';
-FINALTABLE{1,18} = 'Total dwell time per stimulus';
+FINALTABLE{1,11} = 'Location Angle';
+FINALTABLE{1,12} = 'Reported';
+FINALTABLE{1,13} = 'Number of reported';
+FINALTABLE{1,14} = 'Fixated';
+FINALTABLE{1,15} = 'Number of fixation per path';
+FINALTABLE{1,16} = 'Total number of fixations per stimulus';
+FINALTABLE{1,17} = 'Order of first fixation on the path';
+FINALTABLE{1,18} = 'Distance between fixation and path';
+FINALTABLE{1,19} = 'Angle between fixation and path';
+FINALTABLE{1,20} = 'Dwell time per patch';
+FINALTABLE{1,21} = 'Total dwell time per stimulus';
 
 load('F3.mat');
 
@@ -60,14 +63,17 @@ for j=1:8
     FINALTABLE{tablepos,8} = info(sele(i)).Hue_Stimuli;
     FINALTABLE{tablepos,9} = chromaval(j);
     FINALTABLE{tablepos,10} = Ai(2,posPatch);
-    FINALTABLE{tablepos,11} = j>(8-info(sele(i)).LastSeen);
-    FINALTABLE{tablepos,12} = info(sele(i)).LastSeen;
-    FINALTABLE{tablepos,13} = Ai(LPatch+2,posPatch)>0;
-    FINALTABLE{tablepos,14} = sum(Li(2:4,posPatch));
-    FINALTABLE{tablepos,15} = sum(Li(LPatch,:),2);
-    FINALTABLE{tablepos,16} = sum(Ai(4:6,posPatch));
-    FINALTABLE{tablepos,17} = sum(Ti(2:4,posPatch));
-    FINALTABLE{tablepos,18} = info(sele(i)).Time;
+    FINALTABLE{tablepos,11} = Ai(5,posPatch);
+    FINALTABLE{tablepos,12} = j>(8-info(sele(i)).LastSeen);
+    FINALTABLE{tablepos,13} = info(sele(i)).LastSeen;
+    FINALTABLE{tablepos,14} = Ai(LPatch+2,posPatch)>0;
+    FINALTABLE{tablepos,15} = sum(Li(2:4,posPatch));
+    FINALTABLE{tablepos,16} = sum(Li(LPatch,:),2);
+    FINALTABLE{tablepos,17} = sum(Ai(4:6,posPatch));
+    FINALTABLE{tablepos,18} = Ai(6,posPatch);
+    FINALTABLE{tablepos,19} = Ai(7,posPatch);
+    FINALTABLE{tablepos,20} = sum(Ti(2:4,posPatch));
+    FINALTABLE{tablepos,21} = info(sele(i)).Time;
 end
 end
 end
