@@ -94,12 +94,12 @@ for j=1:size(eFix,1);
             numberoftotal(fixloc) = numberoftotal(fixloc)+1;
             timeoftotal(fixloc) = timeoftotal(fixloc) + cell2mat(eFix(j,11)); 
             if ecceoftotal(fixloc)==0, ecceoftotal(fixloc)=100; end
-            eccdistanceofpach = sqrt((PatchCenter(fixloc,1)-x).^2+...
-                (PatchCenter(fixloc,2)-y).^2);
+            eccdistanceofpach = sqrt((PatchCenterT(fixloc,1)-x).^2+...
+                (PatchCenterT(fixloc,2)-y).^2);
             [ecceoftotal(fixloc),inang] = min([ecceoftotal(fixloc) eccdistanceofpach]);
             if inang==2
-            angoftotal(fixloc) = wrapTo360(atan2d(PatchCenter(fixloc,1)-x,...
-                PatchCenter(fixloc,2)-y)); 
+            angoftotal(fixloc) = wrapTo360(atan2d(PatchCenterT(fixloc,1)-x,...
+                PatchCenterT(fixloc,2)-y)); 
             end
         end
     end
