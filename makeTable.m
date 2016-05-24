@@ -29,7 +29,7 @@ FINALTABLE{1,19} = 'Angle between fixation and path';
 FINALTABLE{1,20} = 'Dwell time per patch';
 FINALTABLE{1,21} = 'Total dwell time per stimulus';
 
-load('F3.mat');
+load('F3_BNY.mat');
 
 tablepos = 1;
 for nex = 1:length(expnames);

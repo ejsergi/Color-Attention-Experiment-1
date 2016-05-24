@@ -1,7 +1,7 @@
 clear all
 close all
 
-% load('F3.mat');
+load('F3_BNY.mat');
 % A = B;
 
 expnames = [11,12,14,15,16,18,19,20,21,22,24,25];
@@ -17,7 +17,7 @@ for nex = 1:length(expnames);
 nameExp = sprintf('%03d',expnames(nex));
 
 load(['EXPERIMENTFILES/' nameExp '.mat']);
-load(['ImportET/ET_' nameExp '.mat']);
+% load(['ImportET/ET_' nameExp '.mat']);
 
 permu = info(1).Permutation;
 
@@ -29,8 +29,8 @@ for i=1:4
             mixtures = [];
             total = 0;
             
-          [A(:,:,(i-1)*18+j,nex),L(:,:,(i-1)*18+j,nex),T(:,:,(i-1)*18+j,nex)]...
-                = eyeMatrix(nameExp, info,EyeEvents,iter:iter+2);
+%           [A(:,:,(i-1)*18+j,nex),L(:,:,(i-1)*18+j,nex),T(:,:,(i-1)*18+j,nex)]...
+%                 = eyeMatrix(nameExp, info,EyeEvents,iter:iter+2);
             for t=1:3
                 
                 for l = 1:8
@@ -84,7 +84,7 @@ angles(:,:,nex) = [mean([result(:,1) result(:,end)],2) result mean([result(:,1) 
 
 end
 
-save('F3_BNY.mat','A','L','T')
+% save('F3_BNY.mat','A','L','T')
 
 anglesM=mean(angles,3);
 anglesMstd=std(angles,[],3);
@@ -680,52 +680,52 @@ textla = {'All', '50', '25', '75'};
 
 %% THREE THINGS INSIDE SAME PLOT (DETECTION - FIXATION - FIXATION AND NON DETACTION)
 
-% but = sum(sum((1-A(3,:,:,:)).*sum(L(2:4,:,:,:)>0,1),2),4)/(24*4*12);
-% butT = sum(sum(sum(L(2:4,:,:,:)>0,1),2),4)/(24*4*12);
-% detec = sum(sum(A(3,:,:,:),2),4)/(24*4*12);
-% hue = 10:20:350;
-% PFNR = [];
-% PFNRT = [];
-% DT = [];
-% for j=1:4
-% for i=1:18
-% PFNR(i,j) = but(:,:,18*(j-1)+(i),:);
-% PFNRT(i,j) = butT(:,:,18*(j-1)+(i),:);
-% DT(i,j) = detec(:,:,18*(j-1)+(i),:);
-% end
-% end
-% 
-% PFNR = sum(PFNR,2);
-% PFNR = [(PFNR(1)+PFNR(end))/2; PFNR; (PFNR(1)+PFNR(end))/2];
-% PFNRT = sum(PFNRT,2);
-% PFNRT = [(PFNRT(1)+PFNRT(end))/2; PFNRT; (PFNRT(1)+PFNRT(end))/2];
-% DT = sum(DT,2);
-% DT = [(DT(1)+DT(end))/2; DT; (DT(1)+DT(end))/2];
-% 
-% figure;
-% 
-% h = plot((0:360),interp1([0 hue 360],DT ,0:360,'pchip')); hold on
-% set(h,'LineWidth',3);
-% h = plot((0:360),interp1([0 hue 360],PFNRT ,0:360,'pchip')); hold on
-% set(h,'LineWidth',3);
-% h = plot((0:360),interp1([0 hue 360],PFNR ,0:360,'pchip')); hold on
-% set(h,'LineWidth',3);
-% 
-% for i=1:361;
-%     h = plot((i-1),0.8,'.'); hold on;
-%     set(h,'MarkerSize',40,'Color',colors(i,:));
-% end
-% 
-% figure;
-% 
-% h = polar(deg2rad(0:360),interp1([0 hue 360],DT ,0:360,'pchip')); hold on
-% set(h,'LineWidth',3);
-% h = polar(deg2rad(0:360),interp1([0 hue 360],PFNRT ,0:360,'pchip')); hold on
-% set(h,'LineWidth',3);
-% h = polar(deg2rad(0:360),interp1([0 hue 360],PFNR ,0:360,'pchip')); hold on
-% set(h,'LineWidth',3);
-% 
-% for i=1:361;
-%     h = polar(deg2rad(i-1),0.8,'.'); hold on;
-%     set(h,'MarkerSize',40,'Color',colors(i,:));
-% end
+but = sum(sum((1-A(3,:,:,:)).*sum(L(2:4,:,:,:)>0,1),2),4)/(24*4*12);
+butT = sum(sum(sum(L(2:4,:,:,:)>0,1),2),4)/(24*4*12);
+detec = sum(sum(A(3,:,:,:),2),4)/(24*4*12);
+hue = 10:20:350;
+PFNR = [];
+PFNRT = [];
+DT = [];
+for j=1:4
+for i=1:18
+PFNR(i,j) = but(:,:,18*(j-1)+(i),:);
+PFNRT(i,j) = butT(:,:,18*(j-1)+(i),:);
+DT(i,j) = detec(:,:,18*(j-1)+(i),:);
+end
+end
+
+PFNR = sum(PFNR,2);
+PFNR = [(PFNR(1)+PFNR(end))/2; PFNR; (PFNR(1)+PFNR(end))/2];
+PFNRT = sum(PFNRT,2);
+PFNRT = [(PFNRT(1)+PFNRT(end))/2; PFNRT; (PFNRT(1)+PFNRT(end))/2];
+DT = sum(DT,2);
+DT = [(DT(1)+DT(end))/2; DT; (DT(1)+DT(end))/2];
+
+figure;
+
+h = plot((0:360),interp1([0 hue 360],DT ,0:360,'pchip')); hold on
+set(h,'LineWidth',3);
+h = plot((0:360),interp1([0 hue 360],PFNRT ,0:360,'pchip')); hold on
+set(h,'LineWidth',3);
+h = plot((0:360),interp1([0 hue 360],PFNR ,0:360,'pchip')); hold on
+set(h,'LineWidth',3);
+
+for i=1:361;
+    h = plot((i-1),0.8,'.'); hold on;
+    set(h,'MarkerSize',40,'Color',colors(i,:));
+end
+
+figure;
+
+h = polar(deg2rad(0:360),interp1([0 hue 360],DT ,0:360,'pchip')); hold on
+set(h,'LineWidth',3);
+h = polar(deg2rad(0:360),interp1([0 hue 360],PFNRT ,0:360,'pchip')); hold on
+set(h,'LineWidth',3);
+h = polar(deg2rad(0:360),interp1([0 hue 360],PFNR ,0:360,'pchip')); hold on
+set(h,'LineWidth',3);
+
+for i=1:361;
+    h = polar(deg2rad(i-1),0.8,'.'); hold on;
+    set(h,'MarkerSize',40,'Color',colors(i,:));
+end

@@ -96,7 +96,7 @@ for j=1:size(eFix,1);
             if ecceoftotal(fixloc)==0, ecceoftotal(fixloc)=100; end
             eccdistanceofpach = sqrt((PatchCenterT(fixloc,1)-x).^2+...
                 (PatchCenterT(fixloc,2)-y).^2);
-            [ecceoftotal(fixloc),inang] = min([ecceoftotal(fixloc) eccdistanceofpach]);
+            [ecceoftotal(fixloc),inang] = min([ecceoftotal(fixloc) eccdistanceofpach/pix2deg]);
             if inang==2
             angoftotal(fixloc) = wrapTo360(atan2d(PatchCenterT(fixloc,1)-x,...
                 PatchCenterT(fixloc,2)-y)); 
