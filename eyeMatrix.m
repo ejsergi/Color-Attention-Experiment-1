@@ -79,7 +79,7 @@ for j=1:size(eFix,1);
     y = floor(str2num(cell2mat(eFix(j,13))));
     disx = floor(str2num(cell2mat(eFix(j,17))));
     disy = floor(str2num(cell2mat(eFix(j,18))));
-    diambig = 100;
+    diambig = 75;
     if x-diambig>0&&x+diambig<=1440&&y-diambig>0&&y+diambig<=1440
     fixi = zeros(size(imChroma));
     fixi = insertShape(fixi,'FilledCircle',[x y diambig],'Color','white',...
