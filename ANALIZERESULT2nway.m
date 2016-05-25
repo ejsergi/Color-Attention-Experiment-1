@@ -306,7 +306,7 @@ textla = {'All', '50', '25', '75'};
 % probaFix = zeros(1,24);
 % reported = zeros(1,24);
 % for i=1:24
-%     numfix =  L(2:4,i,:,j);
+%     numfix =  L(2:4,i,:,j)>0;
 %     numRep = A(3,i,:,j);
 %     probaFix(i) = sum(numfix(:))/(72);
 %     reported(i) = sum(numRep(:))/(72);
@@ -322,14 +322,15 @@ textla = {'All', '50', '25', '75'};
 % end
 % colormap(map);
 % colbar = colorbar('southoutside');
-% set(colbar,'Ticks',[0;1],'TickLabels',['No reported';'Reported   ']);
+% % set(colbar,'Ticks',[0;1],'TickLabels',['No reported';'Reported   ']);
 % xlabel('Chroma');
 % ylabel('Probability of being fixated');
 % set(gca,'FontSize',15);
 % axis([0 10 0 1]);
 % title(['Prob of Fixation (Observer ' sprintf('%03d',j) ')']);
-% hgexport(gcf,['ResultsFigures/ProbFixation/Observer/ObserverL_' ...
-%     sprintf('%03d',j) '.eps']);
+% % hgexport(gcf,['ResultsFigures/ProbFixation/Observer/ObserverL_' ...
+% %     sprintf('%03d',j) '.eps']);
+% waitforbuttonpress
 % close all
 % end
 
@@ -378,8 +379,8 @@ textla = {'All', '50', '25', '75'};
 %% CUM.Prob OF DETECTION & CUM.Prob OF REPORT vs CHROMA
 % CHROMA = A(1,:,1,1);
 % PReport = trimmean(trimmean(A(3,:,:,:),5,4),5,3);
-% PDetected = trimmean(trimmean(sum(L(2:4,:,:,:),1),5,4),5,3);
-% plot(CHROMA,PReport); hold on
+% PDetected = trimmean(trimmean(sum(L(2:4,:,:,:)>1,1),5,4),5,3);
+% plot(CHROMA,PReport); hold all
 % plot(CHROMA,PDetected); 
 
 %% CUM.Prob OF D.YELLOW & CUM.Prob OF D.BLUE vs CHROMA
@@ -682,7 +683,7 @@ textla = {'All', '50', '25', '75'};
 
 
 %% THREE THINGS INSIDE SAME PLOT (DETECTION - FIXATION - FIXATION AND NON DETACTION)
-% observer = 12;
+% observer = 1:12;
 % LStar = 1:4;
 % 
 % but = sum(sum((1-A(3,:,:,observer)).*sum(L(2:4,:,:,observer)>0,1),2),4)/(24*numel(LStar)*numel(observer));
@@ -709,11 +710,11 @@ textla = {'All', '50', '25', '75'};
 % 
 % figure;
 % 
-% h = plot((0:360),interp1([0 hue 360],DT ,0:360,'pchip')); hold on
+% h = plot((0:360),interp1([0 hue 360],DT ,0:360,'pchip')); hold all
 % set(h,'LineWidth',3);
-% h = plot((0:360),interp1([0 hue 360],PFNRT ,0:360,'pchip')); hold on
+% h = plot((0:360),interp1([0 hue 360],PFNRT ,0:360,'pchip')); hold all
 % set(h,'LineWidth',3);
-% h = plot((0:360),interp1([0 hue 360],PFNR ,0:360,'pchip')); hold on
+% h = plot((0:360),interp1([0 hue 360],PFNR ,0:360,'pchip')); hold all
 % set(h,'LineWidth',3);
 % 
 % for i=1:361;
@@ -724,7 +725,7 @@ textla = {'All', '50', '25', '75'};
 % figure;
 % 
 % h = polar(deg2rad(0:360),interp1([0 hue 360],DT ,0:360,'pchip')); hold on
-% set(h,'LineWidth',3);
+% set(h,'LineWidth',3); 
 % h = polar(deg2rad(0:360),interp1([0 hue 360],PFNRT ,0:360,'pchip')); hold on
 % set(h,'LineWidth',3);
 % h = polar(deg2rad(0:360),interp1([0 hue 360],PFNR ,0:360,'pchip')); hold on
@@ -736,47 +737,75 @@ textla = {'All', '50', '25', '75'};
 % end
 
 %% CONSFUSION MATRIX
-observer = 1:12;
+% observer = 1:12;
+% LStar = 1:4;
+% 
+% FR = sum(sum((A(3,:,:,observer)).*sum(L(2:4,:,:,observer)>0,1),2),4);
+% nFR = sum(sum((A(3,:,:,observer)).*(1-sum(L(2:4,:,:,observer)>0,1)),2),4);
+% FnR = sum(sum((1-A(3,:,:,observer)).*sum(L(2:4,:,:,observer)>0,1),2),4);
+% nFnR = sum(sum((1-A(3,:,:,observer)).*(1-sum(L(2:4,:,:,observer)>0,1)),2),4);
+% 
+% hue = 10:20:350;
+% FIRE = [];
+% FInRE = [];
+% nFIRE = [];
+% nFInRE = [];
+% for j=LStar
+% for i=1:18
+% FIRE(i,j) = FR(:,:,18*(j-1)+(i),:);
+% FInRE(i,j) = FnR(:,:,18*(j-1)+(i),:);
+% nFIRE(i,j) = nFR(:,:,18*(j-1)+(i),:);
+% nFInRE(i,j) = nFnR(:,:,18*(j-1)+(i),:);
+% end
+% end
+% 
+% FIRE = sum(FIRE,2);
+% FIRE = [(FIRE(1)+FIRE(end))/2; FIRE; (FIRE(1)+FIRE(end))/2];
+% FInRE = sum(FInRE,2);
+% FInRE = [(FInRE(1)+FInRE(end))/2; FInRE; (FInRE(1)+FInRE(end))/2];
+% nFIRE = sum(nFIRE,2);
+% nFIRE = [(nFIRE(1)+nFIRE(end))/2; nFIRE; (nFIRE(1)+nFIRE(end))/2];
+% nFInRE = sum(nFInRE,2);
+% nFInRE = [(nFInRE(1)+nFInRE(end))/2; nFInRE; (nFInRE(1)+nFInRE(end))/2];
+% 
+% CM(1,1,:) = permute(FIRE,[3 2 1]);
+% CM(1,2,:) = permute(FInRE,[3 2 1]);
+% CM(2,1,:) = permute(nFIRE,[3 2 1]);
+% CM(2,2,:) = permute(nFInRE,[3 2 1]);
+% 
+% figure;
+% totalCM = sum(sum(CM(:,:, 1),2),1);
+% plot(0:360,interp1([0 hue 360],FIRE/totalCM,0:360,'pchip'),'LineWidth',2); hold all
+% plot(0:360,interp1([0 hue 360],FInRE/totalCM,0:360,'pchip'),'LineWidth',2);
+% plot(0:360,interp1([0 hue 360],nFIRE/totalCM,0:360,'pchip'),'LineWidth',2);
+% plot(0:360,interp1([0 hue 360],nFInRE/totalCM,0:360,'pchip'),'LineWidth',2);
+% legend('Fixated & Reported','Fixated & no-Reported',...
+%     'no-Fixated & Reported','no-Fixated & no-Reported');
+% axis([0 360 0 1]);
+% 
+% for i=1:361;
+%     h = plot(i-1,0,'.'); hold on;
+%     set(h,'MarkerSize',40,'Color',colors(i,:));
+% end
+% 
+% figure;
+% totalCM = sum(sum(CM(:,:, 1),2),1);
+% plot(0:360,interp1([0 hue 360],(FInRE+nFIRE)/totalCM,0:360,'pchip'),'LineWidth',2); hold all
+% 
+% axis([0 360 0 1]);
+% 
+% for i=1:361;
+%     h = plot(i-1,0,'.'); hold on;
+%     set(h,'MarkerSize',40,'Color',colors(i,:));
+% end
+
+
+%% MAKING TABLES
+observer = 1;
 LStar = 1:4;
 
-FR = sum(sum((A(3,:,:,observer)).*sum(L(2:4,:,:,observer)>0,1),2),4);
-nFR = sum(sum((A(3,:,:,observer)).*(1-sum(L(2:4,:,:,observer)>0,1)),2),4);
-FnR = sum(sum((1-A(3,:,:,observer)).*sum(L(2:4,:,:,observer)>0,1),2),4);
-nFnR = sum(sum((1-A(3,:,:,observer)).*(1-sum(L(2:4,:,:,observer)>0,1)),2),4);
+FR = permute((A(3,:,:,observer)).*sum(L(2:4,:,:,observer)>0,1),[2 3 4 1]);
+nFR = permute((A(3,:,:,observer)).*(1-sum(L(2:4,:,:,observer)>0,1)),[2 3 4 1]);
+FnR = permute((1-A(3,:,:,observer)).*sum(L(2:4,:,:,observer)>0,1),[2 3 4 1]);
+nFnR = permute((1-A(3,:,:,observer)).*(1-sum(L(2:4,:,:,observer)>0,1)),[2 3 4 1]);
 
-hue = 10:20:350;
-FIRE = [];
-FInRE = [];
-nFIRE = [];
-nFInRE = [];
-for j=LStar
-for i=1:18
-FIRE(i,j) = FR(:,:,18*(j-1)+(i),:);
-FInRE(i,j) = FnR(:,:,18*(j-1)+(i),:);
-nFIRE(i,j) = nFR(:,:,18*(j-1)+(i),:);
-nFInRE(i,j) = nFnR(:,:,18*(j-1)+(i),:);
-end
-end
-
-FIRE = sum(FIRE,2);
-FIRE = [(FIRE(1)+FIRE(end))/2; FIRE; (FIRE(1)+FIRE(end))/2];
-FInRE = sum(FInRE,2);
-FInRE = [(FInRE(1)+FInRE(end))/2; FInRE; (FInRE(1)+FInRE(end))/2];
-nFIRE = sum(nFIRE,2);
-nFIRE = [(nFIRE(1)+nFIRE(end))/2; nFIRE; (nFIRE(1)+nFIRE(end))/2];
-nFInRE = sum(nFInRE,2);
-nFInRE = [(nFInRE(1)+nFInRE(end))/2; nFInRE; (nFInRE(1)+nFInRE(end))/2];
-
-CM(1,1,:) = permute(FIRE,[3 2 1]);
-CM(1,2,:) = permute(FInRE,[3 2 1]);
-CM(2,1,:) = permute(nFIRE,[3 2 1]);
-CM(2,2,:) = permute(nFInRE,[3 2 1]);
-
-totalCM = sum(sum(CM(:,:, 1),2),1);
-plot(0:360,interp1([0 hue 360],FIRE/totalCM,0:360,'pchip'),'LineWidth',2); hold on
-plot([0 hue 360],FInRE/totalCM,'LineWidth',2);
-plot([0 hue 360],nFIRE/totalCM,'LineWidth',2);
-plot([0 hue 360],nFInRE/totalCM,'LineWidth',2);
-legend('Fixated & Reported','Fixated & no-Reported',...
-    'no-Fixated & Reported','no-Fixated & no-Reported');
-axis([0 360 0 0.6]);
