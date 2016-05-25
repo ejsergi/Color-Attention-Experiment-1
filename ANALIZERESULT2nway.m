@@ -1,8 +1,9 @@
 clear all
 close all
 
+
 % load('F3_BNY1.mat');
-% A = B;
+
 
 expnames = [11,12,14,15,16,18,19,20,21,22,24,25];
 sele = [1:9:648 2:9:648 3:9:648];
@@ -84,7 +85,9 @@ angles(:,:,nex) = [mean([result(:,1) result(:,end)],2) result mean([result(:,1) 
 
 end
 
-save('F3_ANY.mat','A','L','T')
+
+save('F3_ANY2.mat','A','L','T')
+
 
 anglesM=mean(angles,3);
 anglesMstd=std(angles,[],3);
