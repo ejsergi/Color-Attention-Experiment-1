@@ -2,7 +2,7 @@ clear all
 close all
 
 
-% load('F3_BNY1.mat');
+load('F3_ANY.mat');
 
 
 expnames = [11,12,14,15,16,18,19,20,21,22,24,25];
@@ -18,7 +18,7 @@ for nex = 1:length(expnames);
 nameExp = sprintf('%03d',expnames(nex));
 
 load(['EXPERIMENTFILES/' nameExp '.mat']);
-load(['ImportET/ET_' nameExp '.mat']);
+% load(['ImportET/ET_' nameExp '.mat']);
 
 permu = info(1).Permutation;
 
@@ -30,8 +30,8 @@ for i=1:4
             mixtures = [];
             total = 0;
             
-          [A(:,:,(i-1)*18+j,nex),L(:,:,(i-1)*18+j,nex),T(:,:,(i-1)*18+j,nex)]...
-                = eyeMatrix(nameExp, info,EyeEvents,iter:iter+2);
+%           [A(:,:,(i-1)*18+j,nex),L(:,:,(i-1)*18+j,nex),T(:,:,(i-1)*18+j,nex)]...
+%                 = eyeMatrix(nameExp, info,EyeEvents,iter:iter+2);
             for t=1:3
                 
                 for l = 1:8
@@ -86,7 +86,7 @@ angles(:,:,nex) = [mean([result(:,1) result(:,end)],2) result mean([result(:,1) 
 end
 
 
-save('F3_ANY2.mat','A','L','T')
+% save('F3_ANY2.mat','A','L','T')
 
 
 anglesM=mean(angles,3);
@@ -736,38 +736,47 @@ textla = {'All', '50', '25', '75'};
 % end
 
 %% CONSFUSION MATRIX
-% observer = 1:12;
-% LStar = 1:4;
-% 
-% FR = sum(sum((A(3,:,:,observer)).*sum(L(2:4,:,:,observer)>0,1),2),4);
-% nFR = sum(sum((A(3,:,:,observer)).*(1-sum(L(2:4,:,:,observer)>0,1)),2),4);
-% FnR = sum(sum((1-A(3,:,:,observer)).*sum(L(2:4,:,:,observer)>0,1),2),4);
-% nFnR = sum(sum((1-A(3,:,:,observer)).*(1-sum(L(2:4,:,:,observer)>0,1)),2),4);
-% 
-% hue = 10:20:350;
-% FIRE = [];
-% FInRE = [];
-% nFIRE = [];
-% nFInRE = [];
-% for j=LStar
-% for i=1:18
-% FIRE(i,j) = FR(:,:,18*(j-1)+(i),:);
-% FInRE(i,j) = FnR(:,:,18*(j-1)+(i),:);
-% nFIRE(i,j) = nFR(:,:,18*(j-1)+(i),:);
-% nFInRE(i,j) = nFnR(:,:,18*(j-1)+(i),:);
-% end
-% end
-% 
-% FIRE = sum(FIRE,2);
-% FIRE = permute([(FIRE(1)+FIRE(end))/2; FIRE; (FIRE(1)+FIRE(end))/2],[3 2 1]);
-% FInRE = sum(FInRE,2);
-% FInRE = permute([(FInRE(1)+FInRE(end))/2; FInRE; (FInRE(1)+FInRE(end))/2],[3 2 1]);
-% nFIRE = sum(nFIRE,2);
-% nFIRE = permute([(nFIRE(1)+nFIRE(end))/2; nFIRE; (nFIRE(1)+nFIRE(end))/2],[3 2 1]);
-% nFInRE = sum(nFInRE,2);
-% nFInRE = permute([(nFInRE(1)+nFInRE(end))/2; nFInRE; (nFInRE(1)+nFInRE(end))/2],[3 2 1]);
-% 
-% CM(1,1,:) = FIRE;
-% CM(1,2,:) = FInRE;
-% CM(2,1,:) = nFIRE;
-% CM(2,2,:) = nFInRE;
+observer = 1:12;
+LStar = 1:4;
+
+FR = sum(sum((A(3,:,:,observer)).*sum(L(2:4,:,:,observer)>0,1),2),4);
+nFR = sum(sum((A(3,:,:,observer)).*(1-sum(L(2:4,:,:,observer)>0,1)),2),4);
+FnR = sum(sum((1-A(3,:,:,observer)).*sum(L(2:4,:,:,observer)>0,1),2),4);
+nFnR = sum(sum((1-A(3,:,:,observer)).*(1-sum(L(2:4,:,:,observer)>0,1)),2),4);
+
+hue = 10:20:350;
+FIRE = [];
+FInRE = [];
+nFIRE = [];
+nFInRE = [];
+for j=LStar
+for i=1:18
+FIRE(i,j) = FR(:,:,18*(j-1)+(i),:);
+FInRE(i,j) = FnR(:,:,18*(j-1)+(i),:);
+nFIRE(i,j) = nFR(:,:,18*(j-1)+(i),:);
+nFInRE(i,j) = nFnR(:,:,18*(j-1)+(i),:);
+end
+end
+
+FIRE = sum(FIRE,2);
+FIRE = [(FIRE(1)+FIRE(end))/2; FIRE; (FIRE(1)+FIRE(end))/2];
+FInRE = sum(FInRE,2);
+FInRE = [(FInRE(1)+FInRE(end))/2; FInRE; (FInRE(1)+FInRE(end))/2];
+nFIRE = sum(nFIRE,2);
+nFIRE = [(nFIRE(1)+nFIRE(end))/2; nFIRE; (nFIRE(1)+nFIRE(end))/2];
+nFInRE = sum(nFInRE,2);
+nFInRE = [(nFInRE(1)+nFInRE(end))/2; nFInRE; (nFInRE(1)+nFInRE(end))/2];
+
+CM(1,1,:) = permute(FIRE,[3 2 1]);
+CM(1,2,:) = permute(FInRE,[3 2 1]);
+CM(2,1,:) = permute(nFIRE,[3 2 1]);
+CM(2,2,:) = permute(nFInRE,[3 2 1]);
+
+totalCM = sum(sum(CM(:,:, 1),2),1);
+plot(0:360,interp1([0 hue 360],FIRE/totalCM,0:360,'pchip'),'LineWidth',2); hold on
+plot([0 hue 360],FInRE/totalCM,'LineWidth',2);
+plot([0 hue 360],nFIRE/totalCM,'LineWidth',2);
+plot([0 hue 360],nFInRE/totalCM,'LineWidth',2);
+legend('Fixated & Reported','Fixated & no-Reported',...
+    'no-Fixated & Reported','no-Fixated & no-Reported');
+axis([0 360 0 0.6]);
