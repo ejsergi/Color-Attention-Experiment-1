@@ -683,44 +683,47 @@ textla = {'All', '50', '25', '75'};
 
 
 %% THREE THINGS INSIDE SAME PLOT (DETECTION - FIXATION - FIXATION AND NON DETACTION)
-% observer = 1:12;
-% LStar = 1:4;
-% 
-% but = sum(sum((1-A(3,:,:,observer)).*sum(L(2:4,:,:,observer)>0,1),2),4)/(24*numel(LStar)*numel(observer));
-% butT = sum(sum(sum(L(2:4,:,:,observer)>0,1),2),4)/(24*numel(LStar)*numel(observer));
-% detec = sum(sum(A(3,:,:,observer),2),4)/(24*numel(LStar)*numel(observer));
-% hue = 10:20:350;
-% PFNR = [];
-% PFNRT = [];
-% DT = [];
-% for j=LStar
-% for i=1:18
-% PFNR(i,j) = but(:,:,18*(j-1)+(i),:);
-% PFNRT(i,j) = butT(:,:,18*(j-1)+(i),:);
-% DT(i,j) = detec(:,:,18*(j-1)+(i),:);
-% end
-% end
-% 
-% PFNR = sum(PFNR,2);
-% PFNR = [(PFNR(1)+PFNR(end))/2; PFNR; (PFNR(1)+PFNR(end))/2];
-% PFNRT = sum(PFNRT,2);
-% PFNRT = [(PFNRT(1)+PFNRT(end))/2; PFNRT; (PFNRT(1)+PFNRT(end))/2];
-% DT = sum(DT,2);
-% DT = [(DT(1)+DT(end))/2; DT; (DT(1)+DT(end))/2];
-% 
-% figure;
-% 
-% h = plot((0:360),interp1([0 hue 360],DT ,0:360,'pchip')); hold all
-% set(h,'LineWidth',3);
-% h = plot((0:360),interp1([0 hue 360],PFNRT ,0:360,'pchip')); hold all
-% set(h,'LineWidth',3);
-% h = plot((0:360),interp1([0 hue 360],PFNR ,0:360,'pchip')); hold all
-% set(h,'LineWidth',3);
-% 
-% for i=1:361;
-%     h = plot((i-1),0.8,'.'); hold on;
-%     set(h,'MarkerSize',40,'Color',colors(i,:));
-% end
+observer = 1:12;
+LStar = 1:4;
+
+but = sum(sum((1-A(3,:,:,observer)).*sum(L(2:4,:,:,observer)>0,1),2),4)/(24*numel(LStar)*numel(observer));
+butT = sum(sum(sum(L(2:4,:,:,observer)>0,1),2),4)/(24*numel(LStar)*numel(observer));
+detec = sum(sum(A(3,:,:,observer),2),4)/(24*numel(LStar)*numel(observer));
+hue = 10:20:350;
+PFNR = [];
+PFNRT = [];
+DT = [];
+for j=LStar
+for i=1:18
+PFNR(i,j) = but(:,:,18*(j-1)+(i),:);
+PFNRT(i,j) = butT(:,:,18*(j-1)+(i),:);
+DT(i,j) = detec(:,:,18*(j-1)+(i),:);
+end
+end
+
+PFNR = sum(PFNR,2);
+PFNR = [(PFNR(1)+PFNR(end))/2; PFNR; (PFNR(1)+PFNR(end))/2];
+PFNRT = sum(PFNRT,2);
+PFNRT = [(PFNRT(1)+PFNRT(end))/2; PFNRT; (PFNRT(1)+PFNRT(end))/2];
+DT = sum(DT,2);
+DT = [(DT(1)+DT(end))/2; DT; (DT(1)+DT(end))/2];
+
+figure;
+
+h = plot((0:360),interp1([0 hue 360],DT ,0:360,'pchip')); hold on
+set(h,'LineWidth',3);
+h = plot((0:360),interp1([0 hue 360],PFNRT ,0:360,'pchip')); hold on
+set(h,'LineWidth',3);
+h = plot((0:360),interp1([0 hue 360],PFNR ,0:360,'pchip')); hold on
+set(h,'LineWidth',3);
+
+for i=1:361;
+    h = plot((i-1),1,'.'); hold on;
+    set(h,'MarkerSize',40,'Color',colors(i,:));
+end
+
+axis([0 360 0 1]);
+legend('Reported','Detected','Detected and no Reporeted');
 
 % figure;
 % 
@@ -737,75 +740,39 @@ textla = {'All', '50', '25', '75'};
 % end
 
 %% CONSFUSION MATRIX
-% observer = 1:12;
-% LStar = 1:4;
-% 
-% FR = sum(sum((A(3,:,:,observer)).*sum(L(2:4,:,:,observer)>0,1),2),4);
-% nFR = sum(sum((A(3,:,:,observer)).*(1-sum(L(2:4,:,:,observer)>0,1)),2),4);
-% FnR = sum(sum((1-A(3,:,:,observer)).*sum(L(2:4,:,:,observer)>0,1),2),4);
-% nFnR = sum(sum((1-A(3,:,:,observer)).*(1-sum(L(2:4,:,:,observer)>0,1)),2),4);
-% 
-% hue = 10:20:350;
-% FIRE = [];
-% FInRE = [];
-% nFIRE = [];
-% nFInRE = [];
-% for j=LStar
-% for i=1:18
-% FIRE(i,j) = FR(:,:,18*(j-1)+(i),:);
-% FInRE(i,j) = FnR(:,:,18*(j-1)+(i),:);
-% nFIRE(i,j) = nFR(:,:,18*(j-1)+(i),:);
-% nFInRE(i,j) = nFnR(:,:,18*(j-1)+(i),:);
-% end
-% end
-% 
-% FIRE = sum(FIRE,2);
-% FIRE = [(FIRE(1)+FIRE(end))/2; FIRE; (FIRE(1)+FIRE(end))/2];
-% FInRE = sum(FInRE,2);
-% FInRE = [(FInRE(1)+FInRE(end))/2; FInRE; (FInRE(1)+FInRE(end))/2];
-% nFIRE = sum(nFIRE,2);
-% nFIRE = [(nFIRE(1)+nFIRE(end))/2; nFIRE; (nFIRE(1)+nFIRE(end))/2];
-% nFInRE = sum(nFInRE,2);
-% nFInRE = [(nFInRE(1)+nFInRE(end))/2; nFInRE; (nFInRE(1)+nFInRE(end))/2];
-% 
-% CM(1,1,:) = permute(FIRE,[3 2 1]);
-% CM(1,2,:) = permute(FInRE,[3 2 1]);
-% CM(2,1,:) = permute(nFIRE,[3 2 1]);
-% CM(2,2,:) = permute(nFInRE,[3 2 1]);
-% 
-% figure;
-% totalCM = sum(sum(CM(:,:, 1),2),1);
-% plot(0:360,interp1([0 hue 360],FIRE/totalCM,0:360,'pchip'),'LineWidth',2); hold all
-% plot(0:360,interp1([0 hue 360],FInRE/totalCM,0:360,'pchip'),'LineWidth',2);
-% plot(0:360,interp1([0 hue 360],nFIRE/totalCM,0:360,'pchip'),'LineWidth',2);
-% plot(0:360,interp1([0 hue 360],nFInRE/totalCM,0:360,'pchip'),'LineWidth',2);
-% legend('Fixated & Reported','Fixated & no-Reported',...
-%     'no-Fixated & Reported','no-Fixated & no-Reported');
-% axis([0 360 0 1]);
-% 
-% for i=1:361;
-%     h = plot(i-1,0,'.'); hold on;
-%     set(h,'MarkerSize',40,'Color',colors(i,:));
-% end
-% 
-% figure;
-% totalCM = sum(sum(CM(:,:, 1),2),1);
-% plot(0:360,interp1([0 hue 360],(FInRE+nFIRE)/totalCM,0:360,'pchip'),'LineWidth',2); hold all
-% 
-% axis([0 360 0 1]);
-% 
-% for i=1:361;
-%     h = plot(i-1,0,'.'); hold on;
-%     set(h,'MarkerSize',40,'Color',colors(i,:));
-% end
 
-
-%% MAKING TABLES
-observer = 1;
+observer = 1:12;
 LStar = 1:4;
 
-FR = permute((A(3,:,:,observer)).*sum(L(2:4,:,:,observer)>0,1),[2 3 4 1]);
-nFR = permute((A(3,:,:,observer)).*(1-sum(L(2:4,:,:,observer)>0,1)),[2 3 4 1]);
-FnR = permute((1-A(3,:,:,observer)).*sum(L(2:4,:,:,observer)>0,1),[2 3 4 1]);
-nFnR = permute((1-A(3,:,:,observer)).*(1-sum(L(2:4,:,:,observer)>0,1)),[2 3 4 1]);
+FR = sum(sum((A(3,:,:,observer)).*sum(L(2:4,:,:,observer)>0,1),2),4);
+nFR = sum(sum((A(3,:,:,observer)).*(1-sum(L(2:4,:,:,observer)>0,1)),2),4);
+FnR = sum(sum((1-A(3,:,:,observer)).*sum(L(2:4,:,:,observer)>0,1),2),4);
+nFnR = sum(sum((1-A(3,:,:,observer)).*(1-sum(L(2:4,:,:,observer)>0,1)),2),4);
 
+hue = 10:20:350;
+FIRE = [];
+FInRE = [];
+nFIRE = [];
+nFInRE = [];
+for j=LStar
+for i=1:18
+FIRE(i,j) = FR(:,:,18*(j-1)+(i),:);
+FInRE(i,j) = FnR(:,:,18*(j-1)+(i),:);
+nFIRE(i,j) = nFR(:,:,18*(j-1)+(i),:);
+nFInRE(i,j) = nFnR(:,:,18*(j-1)+(i),:);
+end
+end
+
+FIRE = sum(FIRE,2);
+FIRE = permute([(FIRE(1)+FIRE(end))/2; FIRE; (FIRE(1)+FIRE(end))/2],[3 2 1]);
+FInRE = sum(FInRE,2);
+FInRE = permute([(FInRE(1)+FInRE(end))/2; FInRE; (FInRE(1)+FInRE(end))/2],[3 2 1]);
+nFIRE = sum(nFIRE,2);
+nFIRE = permute([(nFIRE(1)+nFIRE(end))/2; nFIRE; (nFIRE(1)+nFIRE(end))/2],[3 2 1]);
+nFInRE = sum(nFInRE,2);
+nFInRE = permute([(nFInRE(1)+nFInRE(end))/2; nFInRE; (nFInRE(1)+nFInRE(end))/2],[3 2 1]);
+
+CM(1,1,:) = FIRE;
+CM(1,2,:) = FInRE;
+CM(2,1,:) = nFIRE;
+CM(2,2,:) = nFInRE;
