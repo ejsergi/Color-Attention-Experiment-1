@@ -30,6 +30,7 @@ FINALTABLE{1,20} = 'Dwell time per patch';
 FINALTABLE{1,21} = 'Total dwell time per stimulus';
 
 load('F3_ANY.mat');
+load('PatchDistance.mat');
 
 tablepos = 1;
 for nex = 1:length(expnames);
@@ -46,6 +47,7 @@ chromaval=sort(chromaval);
 Ai = A(:,:,floor((i+2)/3),nex);
 Li = L(:,:,floor((i+2)/3),nex);
 Ti = T(:,:,floor((i+2)/3),nex);
+CloseDisi = CloseDis(:,:,floor((i+2)/3),nex);
 LPatch = mod((i+2),3)+2;
 for j=1:8
     tablepos = tablepos+1;
@@ -70,8 +72,8 @@ for j=1:8
     FINALTABLE{tablepos,15} = sum(Li(2:4,posPatch));
     FINALTABLE{tablepos,16} = sum(Li(LPatch,:),2);
     FINALTABLE{tablepos,17} = sum(Ai(4:6,posPatch));
-    FINALTABLE{tablepos,18} = Ai(8,posPatch);
-    FINALTABLE{tablepos,19} = Ai(9,posPatch);
+    FINALTABLE{tablepos,18} = CloseDisi(2,posPatch);
+    FINALTABLE{tablepos,19} = CloseDisi(3,posPatch);
     FINALTABLE{tablepos,20} = sum(Ti(2:4,posPatch));
     FINALTABLE{tablepos,21} = info(sele(i)).Time;
 end
