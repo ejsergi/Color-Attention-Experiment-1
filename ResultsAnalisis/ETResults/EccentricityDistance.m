@@ -34,7 +34,7 @@ colors=lines(2);
 figure, hold on;
 plot(0.5:0.05:17.5,yy,'LineWidth',3,'Color',colors(2,:));
 plot(0.5:17.5,comD,'o','LineWidth',2,'Color',colors(1,:));
-xlabel('Distance patch to center (^o)');
-ylabel('Distance fixation to patch (^o)');
+xlabel('Distance patch to center (^o)','FontSize',20);
+ylabel('Distance fixation to patch (^o)','FontSize',20);
 set(gca,'LineWidth',2,'FontSize',20);
-% boxplot(disLabel(1,:),disLabel(2,:))
+hgexport(gcf,'Figures/EccentricityD.eps')
