@@ -31,8 +31,10 @@ end
 plot(nChroma,RChr,'LineWidth',3)
 legend('L^* \in [0,100]','L^*=50','L^*=25','L^*=75','Location','SouthEast');
 xlabel('Chroma (C^*)');
-ylabel('Probability of report');
+ylabel('Probability of reporting');
 set(gca,'FontSize',20,'LineWidth',2);
+
+hgexport(gcf,'Figures/ReportLight.eps');
 
 
 % for i=1:18

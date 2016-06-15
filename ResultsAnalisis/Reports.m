@@ -33,9 +33,9 @@ RChr = interp1(chromas,smooth(Report(:,i)),nChroma);
 
 MinChroma(i) = nChroma(inx);
 
-[diff,inx] = min(abs(RChr-0.9));
+[diff,inx] = min(abs(RChr-0.75));
 U(i) = nChroma(inx);
-[diff,inx] = min(abs(RChr-0.1));
+[diff,inx] = min(abs(RChr-0.25));
 L(i) = nChroma(inx);
 end
 
@@ -54,11 +54,10 @@ end
 plot(hue,MinChroma,'k','LineWidth',3)
 
 axis([10,350,2,7]);
-xlabel('Hue value (h^o)');
-ylabel('Chroma value (C^*)');
+xlabel('Hue angle (h^o)','FontSize',20);
+ylabel('Chroma value (C^*)','FontSize',20);
 set(gca,'FontSize',20,'LineWidth',2);
-
-
+% hgexport(gcf,'Figures/reports.eps');
 
 % p = polyfit(hue,MinChroma,11);
 % fitti = polyval(p,10:350);

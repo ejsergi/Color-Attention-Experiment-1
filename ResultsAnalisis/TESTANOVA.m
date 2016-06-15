@@ -30,10 +30,10 @@ rerep = [reshape(repo(1:18,:),1,[]); reshape(repo(18+(1:18),:),1,[]); ...
 %Run ANOVA test
 p_hues = anova1(rerepot);
 p_observers = anova1(repo);
-p_lightness = anova1(rerep(:,2:4));
+p_lightness = anova1(rerep(:,3:4));
 
 %Run t-test
 
-[h,p_lightness] = ttest2(rerep(:,1),rerep(:,2));
+[h,p_lightness] = ttest2(rerep(:,3),rerep(:,4));
 
 [R,p] = corrcoef(rerep);
