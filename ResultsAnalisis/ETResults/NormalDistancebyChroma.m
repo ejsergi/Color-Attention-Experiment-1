@@ -17,15 +17,24 @@ close all
 
 load('F3_ANY.mat');
 load('PatchDistance2.mat');
+load('DistancePatchCenter.mat');
 
 CHROMAS = A(1,:,1,1);
 
-
+disPatch = reshape(A(2,:,:,[1,6,9,12]),24,[])';
 DisvsChro = reshape(CloseDis(2,:,:,[1,6,9,12]),24,[])';
+for i=1:size(disPatch,1)
+    for j = 1:size(disPatch,2);
+        
+        [~,indD] = min(abs(disPatch(i,j)-xx));
+        disNorm(i,j) = DisvsChro(i,j)/yy(indD);
+        
+    end
+end
 
-p = anova1(DisvsChro,[],'off');
+p = anova1(disNorm,[],'off');
 
-Dmean = median(DisvsChro,1);
+Dmean = median(disNorm,1);
 
 po = polyfit(CHROMAS,Dmean,5);
 yy = polyval(po,1.3:0.05:10);

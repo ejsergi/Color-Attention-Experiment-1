@@ -19,7 +19,7 @@ hue = 10:20:350;
 colors = applycform([60*ones(1,18); a; b]',makecform('lab2srgb'));
 
 for i=1:18
-DisvsChro(:,i) = reshape(CloseDis(2,16:24,[i 18+i 2*18+i 3*18+i],:),1,[])';
+DisvsChro(:,i) = reshape(CloseDis(2,1:6,[i 18+i 2*18+i 3*18+i],:),1,[])';
 end
 
 p = anova1(DisvsChro,[],'on');
@@ -38,4 +38,4 @@ xlabel('Hue angle (h^o)','FontSize',20);
 ylabel('Fixation - patch distance (visual degrees)','FontSize',20);
 title('Chromas from 7 up');
 set(gca,'LineWidth',2,'FontSize',20);
-hgexport(gcf,'DistancehueChromaHigh.eps');
+% hgexport(gcf,'DistancehueChromaHigh.eps');

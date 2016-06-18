@@ -23,25 +23,33 @@ CHROMAS = A(1,:,1,1);
 hue = 10:20:350;
 [a,b] = pol2cart(deg2rad(hue),140*ones(1,18));
 colors = applycform([60*ones(1,18); a; b]',makecform('lab2srgb'));
+distantT = [2, 2.5, 3];
+for i=1:3
+numFix = zeros(1,24,72,12);
+numFix(CloseDis(2,:,:,:)<distantT(i)) = 1;
+numFix = reshape(permute(numFix,[3 1 2 4]),72,[]);
+numFix = [numFix(1:18,:) numFix(18+(1:18),:) numFix(2*18+(1:18),:) numFix(3*18+(1:18),:)]';
 
-numFix = reshape(permute(NumberOfFix(:,:,:,:),[2 1 3 4]),18,[])';
 
-p = anova1(numFix(:,[1 9]),[],'off');
+p(i) = anova1(numFix,[],'off');
 
-numFixM = trimmean(numFix,5,'round',1);
-standDev = std(numFix,0,1)/sqrt(size(numFix,1));
-po = polyfit(hue,numFixM,6);
-yy = polyval(po,10:1:350);
+numFixM(i,:) = mean(numFix,1);
+standDev(i,:) = std(numFix,0,1)/sqrt(size(numFix,1));
+end
 figure, hold on;
 % plot(10:1:350,yy,'k','LineWidth',3);
-errorbar(hue,numFixM,standDev,'k.','LineWidth',2);
+errorbar(hue,numFixM(2,:),standDev(2,:),'k','LineWidth',2);
 for i = 1:18
-plot(hue(i),numFixM(i),'.','MarkerSize',50,'Color',colors(i,:));
+plot(hue(i),numFixM(2,i),'.','MarkerSize',50,'Color',colors(i,:));
 end
+colorlin = lines(2);
+plot(hue,numFixM(1,:),'--','LineWidth',2,'Color',colorlin(1,:));
+plot(hue,numFixM(3,:),'-.','LineWidth',2,'Color',colorlin(2,:));
+
 
 % axis([1,10,3,4.3]);
 xlabel('Hue angle (h^o)','FontSize',20);
 ylabel('Number of fixations per stimuli','FontSize',20);
 set(gca,'LineWidth',2,'FontSize',20,'XLim',[0 360]);
 
-hgexport(gcf,'Figures/NumberOfFixHue.eps');
+% hgexport(gcf,'Figures/NumberOfFixHue.eps');

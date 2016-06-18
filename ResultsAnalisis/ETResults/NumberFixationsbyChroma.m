@@ -32,4 +32,4 @@ xlabel('Chroma (C^*)','FontSize',20);
 ylabel('Number of fixation on patch','FontSize',20);
 set(gca,'LineWidth',2,'FontSize',20);
 
-hgexport(gcf,'Figures/NumberOfFixChroma.eps')
+% hgexport(gcf,'Figures/NumberOfFixChroma.eps')
