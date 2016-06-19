@@ -23,18 +23,24 @@ CHROMAS = A(1,:,1,1);
 
 DisvsChro = reshape(CloseDis(2,:,:,[1,6,9,12]),24,[])';
 
-p = anova1(DisvsChro,[],'off');
+p = anova1(DisvsChro(:,13:20),[],'off');
 
-Dmean = median(DisvsChro,1);
+Dmean = trimmean(DisvsChro,5,'round',1);
+standDev = std(DisvsChro,0,1)/sqrt(size(DisvsChro,1));
 
-po = polyfit(CHROMAS,Dmean,5);
+po = polyfit(CHROMAS,Dmean,2);
 yy = polyval(po,1.3:0.05:10);
 colors=lines(2);
 figure, hold on;
-plot(1.3:0.05:10,yy,'LineWidth',3,'Color',colors(2,:));
-plot(CHROMAS,Dmean,'o','LineWidth',2,'Color',colors(1,:));
+plot([1 10.3],[3 3],'--','LineWidth',2);
+plot([1 10.3],[4 4],'-.','LineWidth',2);
+plot([1 10.3],[3.5 3.5],'k','LineWidth',1);
+
+% plot(1.3:0.05:10,yy,'k--','LineWidth',2);
+errorbar(CHROMAS,Dmean,standDev,'k','MarkerSize',50,'LineWidth',2);
+plot(CHROMAS,Dmean,'.','MarkerSize',50,'LineWidth',2);
 % axis([1,10,3,4.3]);
 xlabel('Chroma (C^*)','FontSize',20);
 ylabel('Fixation - patch distance (visual degrees)','FontSize',20);
-set(gca,'LineWidth',2,'FontSize',20);
-% hgexport(gcf,'Figures/DistancebyChroma.eps');
+set(gca,'LineWidth',2,'FontSize',20,'XLim',[1 10.3]);
+hgexport(gcf,'Figures/DistancebyChroma.eps');
