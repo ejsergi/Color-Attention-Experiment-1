@@ -26,7 +26,7 @@ load('TimetoReport.mat');
 timeT = permute(sum(time,1),[2 3 1]);
 timeT = [timeT(1:18,:) timeT(18+(1:18),:) timeT(2*18+(1:18),:) timeT(3*18+(1:18),:)]';
 
-p_hue = anova1(timeT,[],'off');
+p_hue = anova1(timeT(:,[4 5 11 12]),[],'off');
 % [cof,p] = corrcoef(timeT);
 % plot(hue,mean(timeT,1));
 figure; hold on

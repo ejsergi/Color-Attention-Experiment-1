@@ -35,39 +35,33 @@ figure; hold on
 
 
 
-hueU = 1:3;
-Report = reshape(permute(A(3,:,[hueU 18+hueU 2*18+hueU 3*18+hueU],:)...
-    ,[2 1 3 4]),24,[]);
-CloseDist = reshape(permute(1/CloseDis(2,:,[hueU 18+hueU 2*18+hueU ...
-    3*18+hueU],:),[2 1 3 4]),24,[]);
-for i=1:24
-    ProbFR(i) = trimmean(CloseDist(i,:).*Report(i,:),20)*2.4;
-    stdF(i) = std(CloseDist(i,Report(i,:)==1)); 
-end
+% hueU = 1:3;
+% Report = reshape(permute(A(3,:,[hueU 18+hueU 2*18+hueU 3*18+hueU],:),...
+%     [2 1 3 4]),24,[]);
+% CloseDist = trimmean(reshape(permute(1/CloseDis(2,:,[hueU 18+hueU 2*18+hueU ...
+%     3*18+hueU],[1 6 9 12]),[2 1 3 4]),24,[]),5,'round',2);
+% 
+% plot(CHROMAS,(smooth(CloseDist)-min(smooth(CloseDist)))*3,'r','LineWidth',3);
+% plot(CHROMAS,mean(Report,2),'r--','LineWidth',3);
 
-Red = CloseDist(:).*Report(:);
-
-plot(CHROMAS,smooth(ProbFR),'r','LineWidth',3);
-
-hueU = 5:6;
+hueU = 5:8;
 Report = reshape(permute(A(3,:,[hueU 18+hueU 2*18+hueU 3*18+hueU],:),...
     [2 1 3 4]),24,[]);
-CloseDist = reshape(permute(1/CloseDis(2,:,[hueU 18+hueU 2*18+hueU ...
-    3*18+hueU],:),[2 1 3 4]),24,[]);
-for i=1:24
-    ProbFG(i) = trimmean(CloseDist(i,:).*Report(i,:),20)*2.4;
-    stdF(i) = std(CloseDist(i,Report(i,:)==1)); 
-end
+CloseDist = trimmean(reshape(permute(1/CloseDis(2,:,[hueU 18+hueU 2*18+hueU ...
+    3*18+hueU],:),[2 1 3 4]),24,[]),5,'round',2);
 
-plot(CHROMAS,smooth(ProbFG),'g','LineWidth',3);
+
+plot(CHROMAS,(smooth(CloseDist)-min(CloseDist))*5.5,'g','LineWidth',3);
+plot(CHROMAS,mean(Report,2),'g--','LineWidth',3);
+
 
 set(gca,'YLim',[0 1]);
-legend('h^o = [310^o,330^o]','h^o = [230^o,270^o]','Location','SouthEast');
+legend('Fixating','Reporting','Location','SouthEast');
 xlabel('Chroma value (C^*)','FontSize',25);
-ylabel('Prob of rep. & precise fix.','FontSize',25);
+ylabel('Probability','FontSize',25);
 grid on;
 set(gca,'FontSize',25,'LineWidth',2);
 
-hgexport(gcf,'FixAndRepBM.eps');
+hgexport(gcf,'FixAndRepG.eps');
 
 

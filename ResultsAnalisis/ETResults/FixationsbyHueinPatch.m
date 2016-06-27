@@ -25,8 +25,7 @@ hue = 10:20:350;
 colors = applycform([60*ones(1,18); a; b]',makecform('lab2srgb'));
 distantT = [2.5, 3, 3.5];
 for i=1:3
-numFix = zeros(1,24,72,4);
-numFix(CloseDis(2,:,:,:)<distantT(i)) = 1;
+numFix = double(CloseDis(2,:,:,:)<distantT(i));
 numFix = reshape(permute(numFix,[3 1 2 4]),72,[]);
 numFix = [numFix(1:18,:) numFix(18+(1:18),:) numFix(2*18+(1:18),:) numFix(3*18+(1:18),:)]';
 

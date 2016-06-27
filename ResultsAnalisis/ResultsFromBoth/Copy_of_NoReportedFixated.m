@@ -1,5 +1,5 @@
 clear all
-close all
+% close all
 
 load('F3_ANY.mat');
 load('PatchDistance2.mat');
@@ -49,35 +49,35 @@ figure; hold on
 hueU = 1:3;
 Report = reshape(permute(A(3,:,[hueU 18+hueU 2*18+hueU 3*18+hueU],[1 6 9 12]),...
     [2 1 3 4]),24,[]);
-CloseDist = reshape(permute(double(CloseDis(2,:,[hueU 18+hueU 2*18+hueU ...
-    3*18+hueU],[1 6 9 12])<3.5),[2 1 3 4]),24,[]);
+CloseDist2 = reshape(permute(double(CloseDis(2,:,[hueU 18+hueU 2*18+hueU ...
+    3*18+hueU],[1 6 9 12])<2),[2 1 3 4]),24,[]);
 
 % plot(CHROMAS,((smooth(CloseDist)-min(smooth(CloseDist)))*3).*...
 %     (1-mean(Report,2)),'r','LineWidth',3);
 
-plot(CHROMAS,(mean(CloseDist.*(1-Report),2)),'r','LineWidth',3);
-% plot(CHROMAS,(mean((1-CloseDist).*Report,2)),'r--','LineWidth',3);
+plot(CHROMAS,smooth(mean(CloseDist2,2)),'r','LineWidth',3);
+plot(CHROMAS,smooth(mean(Report,2)),'r--','LineWidth',3);
 
-A1 = (1-CloseDist).*Report;
+
 hueU = 7:9;
 Report = reshape(permute(A(3,:,[hueU 18+hueU 2*18+hueU 3*18+hueU],[1 6 9 12]),...
     [2 1 3 4]),24,[]);
-CloseDist = reshape(permute(double(CloseDis(2,:,[hueU 18+hueU 2*18+hueU ...
-    3*18+hueU],:)<3.5),[2 1 3 4]),24,[]);
-
+CloseDist1 = reshape(permute(double(CloseDis(2,:,[hueU 18+hueU 2*18+hueU ...
+    3*18+hueU],[1 6 9 12])<2),[2 1 3 4]),24,[]);
 
 % plot(CHROMAS,((smooth(CloseDist)-min(smooth(CloseDist)))*5.5).*...
 %     (1-mean(Report,2)),'g','LineWidth',3);
-A2 = (1-CloseDist).*Report;
-plot(CHROMAS,(mean(CloseDist.*(1-Report),2)),'g','LineWidth',3);
-% plot(CHROMAS,(mean((1-CloseDist).*Report,2)),'g--','LineWidth',3);
+
+plot(CHROMAS,smooth(mean(CloseDist1,2)),'g','LineWidth',3);
+plot(CHROMAS,smooth(mean(Report,2)),'g--','LineWidth',3);
 
 % p = anova1(CloseDist');
 
-set(gca,'YLim',[0 1]);
-xlabel('Chroma value (C^*)','FontSize',25);
-ylabel('Prob. of fix. & no rep.','FontSize',25);
+set(gca,'XLim',[1 10],'YLim',[0 1]);
+legend('Fixation','Report','Fixation','Report','Location','SouthEast');
+xlabel('Chroma value (C^*)','FontSize',20);
+ylabel('Probability','FontSize',20);
 grid on;
-set(gca,'FontSize',25,'LineWidth',2);
+set(gca,'FontSize',20,'LineWidth',2);
 
-hgexport(gcf,'FixAndRepContrast1.eps');
+hgexport(gcf,'FixAndRepT.eps');

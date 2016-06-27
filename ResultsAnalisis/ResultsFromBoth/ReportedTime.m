@@ -38,8 +38,8 @@ for i=1:18
 end
 errorbar(hue,Tmean,sem,'k.','MarkerSize',1,'LineWidth',2);
 axis([0 360 250 550]);
-xlabel('Hue angle (h^o)','FontSize',20);
-ylabel('Median fixation time (ms)','FontSize',20);
-set(gca,'FontSize',20,'LineWidth',2);
+xlabel('Hue angle (h^o)','FontSize',25);
+ylabel('Median fixation time (ms)','FontSize',25);
+set(gca,'FontSize',25,'LineWidth',2);
 
 hgexport(gcf,'Figures/DoubleData/TimeonReported.eps');

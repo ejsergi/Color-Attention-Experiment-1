@@ -21,12 +21,22 @@ load('PatchDistance2.mat');
 CHROMAS = A(1,:,1,1);
 
 
-DisvsChro = reshape(CloseDis(2,:,:,[1,6,9,12]),24,[])';
+DisvsChro = reshape(CloseDis(2,:,:,:),24,[])';
 
 p = anova1(DisvsChro(:,13:20),[],'off');
 
-Dmean = trimmean(DisvsChro,5,'round',1);
+% Dmean = trimmean(DisvsChro,5,'round',1);
 standDev = std(DisvsChro,0,1)/sqrt(size(DisvsChro,1));
+DisvsChroNan=DisvsChro;
+for i =1:24
+DisvsChroNan(DisvsChro(:,i)>3,i) = NaN;
+end
+Dmean = nanmean(DisvsChroNan);
+
+% figure, hold on;
+% for i=1:24
+%     plot(repmat(CHROMAS(i),864,1),DisvsChro(:,i),'.');
+% end
 
 po = polyfit(CHROMAS,Dmean,2);
 yy = polyval(po,1.3:0.05:10);

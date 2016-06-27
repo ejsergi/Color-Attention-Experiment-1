@@ -36,8 +36,8 @@ errorbar(hue,Dmean,sem,'k.','MarkerSize',1,'LineWidth',2);
 for i = 1:18
 plot(hue(i),Dmean(i),'.','MarkerSize',60,'LineWidth',3,'Color',colors(i,:));
 end
-xlabel('Hue angle (h^o)','FontSize',20);
-ylabel('Fixation - patch distance (visual degrees)','FontSize',20);
-set(gca,'LineWidth',2,'FontSize',20,'XLim',[0 360]);
+xlabel('Hue angle (h^o)','FontSize',25);
+ylabel('Fixation - patch distance','FontSize',25);
+set(gca,'LineWidth',2,'FontSize',25,'XLim',[0 360]);
 
 hgexport(gcf,'Figures/DoubleData/DistanceonReported.eps');
