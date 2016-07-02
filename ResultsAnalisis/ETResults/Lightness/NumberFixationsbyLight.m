@@ -26,7 +26,12 @@ colors = applycform([60*ones(1,18); a; b]',makecform('lab2srgb'));
 
 numFix = reshape(permute(NumberOfFix(:,:,:,:),[3 1 2 4]),4,[])';
 
-p = anova1(numFix,[],'off');
+[p,~,stats] = anova1(numFix,[],'on');
+[c,m]=multcompare(stats);
+
+LM = mean(numFix,1);
+LS = std(numFix,1)/sqrt(size(numFix,1));
+
 
 numFixM = median(numFix,1);
 standDev = std(numFix,0,1)/sqrt(size(numFix,1));

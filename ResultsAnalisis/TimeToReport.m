@@ -19,14 +19,17 @@ hue = 10:20:350;
 
 hue = 10:20:350;
 [a,b] = pol2cart(deg2rad(hue),140*ones(1,18));
-colors = applycform([60*ones(1,18); a; b]',makecform('lab2srgb'));
+colors = hsv(18);
+colors = [colors(end,:); colors(1:end-1,:)];
 
 load('TimetoReport.mat');
 
 timeT = permute(sum(time,1),[2 3 1]);
 timeT = [timeT(1:18,:) timeT(18+(1:18),:) timeT(2*18+(1:18),:) timeT(3*18+(1:18),:)]';
 
-p_hue = anova1(timeT(:,[4 5 11 12]),[],'off');
+[p_hue,~,stats] = anova1(timeT,[],'off');
+[c,m]=multcompare(stats);
+
 % [cof,p] = corrcoef(timeT);
 % plot(hue,mean(timeT,1));
 figure; hold on
@@ -45,7 +48,12 @@ timeTT = permute(sum(time,1),[2,3,1]);
 timeTT = [reshape(timeTT(1:18,:),1,[]); reshape(timeTT(18+(1:18),:),1,[]); ...
     reshape(timeTT(2*18+(1:18),:),1,[]); reshape(timeTT(3*18+(1:18),:),1,[])]';
 
-p_light = anova1(timeTT(:,3:4),[],'off');
+[p_light,~,stats] = anova1(timeTT,[],'off');
+[c,m]=multcompare(stats);
+
+LM = mean(timeTT,1);
+LS = std(timeTT,1)/sqrt(size(timeTT,1));
+
 colorlines = lines(4);
 figure; hold on
 for i=1:4

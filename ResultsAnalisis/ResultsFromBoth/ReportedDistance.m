@@ -10,13 +10,13 @@ hue = 10:20:350;
 [a,b] = pol2cart(deg2rad(hue),140*ones(1,18));
 colors = applycform([60*ones(1,18); a; b]',makecform('lab2srgb'));
 
-Report = reshape(permute(A(3,:,:,:),[3 1 2 4]),72,[]);
+Report = reshape(permute(A(3,:,:,[1,3,5,6,11,12]),[3 1 2 4]),72,[]);
 Report = [Report(1:18,:) Report(18+(1:18),:) Report(2*18+(1:18),:)...
     Report(3*18+(1:18),:)];
 
 HueVal = repmat((1:18)',1,size(Report,2));
 
-CloseDist = reshape(permute(CloseDis(2,:,:,:),[3 1 2 4]),72,[]);
+CloseDist = reshape(permute(CloseDis(2,:,:,[1,3,5,6,11,12]),[3 1 2 4]),72,[]);
 CloseDist = [CloseDist(1:18,:) CloseDist(18+(1:18),:) CloseDist(2*18+(1:18),:)...
     CloseDist(3*18+(1:18),:)];
 
@@ -40,4 +40,4 @@ xlabel('Hue angle (h^o)','FontSize',25);
 ylabel('Fixation - patch distance','FontSize',25);
 set(gca,'LineWidth',2,'FontSize',25,'XLim',[0 360]);
 
-hgexport(gcf,'Figures/DoubleData/DistanceonReported.eps');
+% hgexport(gcf,'Figures/DoubleData/DistanceonReported.eps');

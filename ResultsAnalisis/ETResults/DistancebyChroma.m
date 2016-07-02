@@ -17,11 +17,20 @@ close all
 
 load('F3_ANY.mat');
 load('PatchDistance2.mat');
+load('DistancePatchCenter.mat');
 
 CHROMAS = A(1,:,1,1);
+dispatch = A(2,:,:,:);
+for i=1:size(dispatch,2)
+    for j=1:size(dispatch,3)
+        for t=1:size(dispatch,4)
+            [~,indD] = min(abs(dispatch(1,i,j,t)-xx));
+            CloseDis(2,i,j,t) = CloseDis(2,i,j,t)*mean(yy)/yy(indD);
+        end
+    end
+end
 
-
-DisvsChro = reshape(CloseDis(2,:,:,:),24,[])';
+DisvsChro = reshape(CloseDis(2,:,:,[1,3,5,6,11,12]),24,[])';
 
 p = anova1(DisvsChro(:,13:20),[],'off');
 

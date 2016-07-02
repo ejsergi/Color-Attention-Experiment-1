@@ -16,7 +16,11 @@ TimeF = [reshape(TimeF(1:18,:),1,[]);...
     reshape(TimeF(18+(1:18),:),1,[]); reshape(TimeF(2*18+(1:18),:),1,[]);...
     reshape(TimeF(3*18+(1:18),:),1,[]);]';
 
-p = anova1(TimeF,[],'off');
+[p,~,stats] = anova1(TimeF,[],'on');
+[c,m]=multcompare(stats);
+
+LM = mean(TimeF,1);
+LS = std(TimeF,1)/sqrt(size(TimeF,1));
 
 Tmean = trimmean(TimeF,40,'round',1);
 standDev = std(TimeF,0,1)/sqrt(size(TimeF,1));

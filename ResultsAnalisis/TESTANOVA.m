@@ -30,7 +30,7 @@ rerep = [reshape(repo(1:18,:),1,[]); reshape(repo(18+(1:18),:),1,[]); ...
 %Run ANOVA test
 p_hues = anova1(rerepot);
 p_observers = anova1(repo);
-p_lightness = anova1(rerep(:,3:4));
+p_lightness = anova1(rerep);
 
 %Run t-test
 

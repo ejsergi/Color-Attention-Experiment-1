@@ -24,7 +24,7 @@ hue = 10:20:350;
 [a,b] = pol2cart(deg2rad(hue),140*ones(1,18));
 colors = applycform([60*ones(1,18); a; b]',makecform('lab2srgb'));
 
-numFix = reshape(permute(NumberOfFix(:,:,:,:),[2 1 3 4]),18,[])';
+numFix = reshape(permute(NumberOfFix(:,:,:,[1,3,5,6,11,12]),[2 1 3 4]),18,[])';
 
 p = anova1(numFix(:,[1 9]),[],'off');
 
