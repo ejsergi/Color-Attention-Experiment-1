@@ -1,22 +1,22 @@
 clear all
 close all
 
-addpath('Profiles and Colors/')
-addpath('OtherFunctions/')
-
 %%%%%
 %Please add the number of set of stimuli (observers) you want to create,
 %and which one is the last one already created
 num_set = 10; 
 last_created = 20;
+%%%%%
 
-for nexper=21:30
+addpath('Other');
+
+for nexper=last_created+1:last_created+num_set
 
 tic    
     
 nameExp = sprintf('%03d',nexper);
 
-mkdir('/Volumes/myshares/Sergis share/STIMULIS/',nameExp);
+mkdir('/Users/sergietchebehere/Desktop/STIMULIS/',nameExp);
 
 info = struct([]);
 %%
@@ -187,7 +187,7 @@ imwrite(legendIm,['/Volumes/myshares/Sergis share/STIMULIS/' nameExp '/L' ...
 end
 %%
 
-save(['STIMULIS/' nameExp '.mat'],'info','-v7.3');
+save(['STIMULISinfo/' nameExp '.mat'],'info','-v7.3');
 
 end_time = toc;
 
