@@ -7,7 +7,7 @@ The full path of all the files in the codes are relative the the computer used i
 ## Process of usage
 
 1. [Preparation of stimuli](../Documentation/Preparation.md)
-2.
+2. [Running the experiment](../Documentation/Run.md)
 
 
 ## Content of folders

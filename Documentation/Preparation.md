@@ -1,7 +1,7 @@
 # Preparation of stimuli
 
 A priori of running the experiment, the stimuli have to be created. Each stimulus is a PNG image of 1440x1440 pixels. The high computational requirements make impossible to create the stimuli in real time meanwhile running the experiment.
-All the files and scripts needed in order to prepare the stimuli are found in the folder [`Scripts/Prepare/`](../Scripts/Prepare)
+> All the files and scripts needed in order to prepare the stimuli are found in the folder [`Scripts/Prepare/`](../Scripts/Prepare)
 
 The first needed thing is to know all the possible *CIELAB* values that the experimental monitor can reproduce, and then apply a proportional space in terms of all chroma for all the different hues. The script [`MAKEPOINTS.m`] is designed for doing this, it simply need to be run with the path to the Monitor ICC profile in the line 8 of the code. The script will create a file on the same folder named `PointsLab.mat` which contains all the colors that the monitor can reproduce, this information will be needed to create the stimuli.
 
