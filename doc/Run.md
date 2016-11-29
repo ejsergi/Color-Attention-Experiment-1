@@ -3,7 +3,7 @@ Running the experiment
 
 This part of the documentation goes through the process of running the experiment, explaining in detail both hardware and software set up.
 
-> Notice that all the files needed to run the experiment are found in the folder [`Run/`](../Scripts/Run).
+> Notice that all the files needed to run the experiment are found in the folder [`Run/`](../script/Run).
 
 The experiment was prepared for a really specific set-up, therefore codes were created with the goal of being functional in this set-up. If different set-up is needed, probably big changes in the codes will be needed. Whether you want to replicate the experiment or run it differently, knowledge of the hardware set-up and how the codes works is needed.
 
@@ -28,7 +28,7 @@ Probably the more challenging part is establish the connection between the two C
 Running the code
 ----------------
 
-The main function in order to run the experiment is [`RUNEXPERIMENT.m`]. Function needs having on patch both the [*Psychtoolbox*](http://psychtoolbox.org) and the [`SMIFiles/`](../Scripts/Run/SMIFiles). The function need to also have a specific folder on where to save the reported data [`EXPERIMENTFILES/`] and a local folder on the **SMI CPU** on where save the eye movements file.
+The main function in order to run the experiment is [`RUNEXPERIMENT.m`]. Function needs having on patch both the [*Psychtoolbox*](http://psychtoolbox.org) and the [`SMIFiles/`](../script/Run/SMIFiles). The function need to also have a specific folder on where to save the reported data [`EXPERIMENTFILES/`] and a local folder on the **SMI CPU** on where save the eye movements file.
 
 The function is configured to only run one trial for each chroma, hue, and lightness.
 
@@ -66,5 +66,5 @@ save(['EXPERIMENTFILES/' nameExp '.mat'],'info','-v7.3');
 
 To have more details in how the function works step by step, refer to the comments located within the function.
 
-[`RUNEXPERIMENT.m`]: ../Scripts/Run/RUNEXPERIMENT.m
-[`EXPERIMENTFILES/`]: ../Scripts/Run/EXPERIMENTFILES
+[`RUNEXPERIMENT.m`]: ../script/Run/RUNEXPERIMENT.m
+[`EXPERIMENTFILES/`]: ../script/Run/EXPERIMENTFILES

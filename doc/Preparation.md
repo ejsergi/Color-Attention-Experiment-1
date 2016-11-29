@@ -1,7 +1,7 @@
 # Preparation of stimuli
 
 A priori of running the experiment, the stimuli have to be created. Each stimulus is a PNG image of 1440x1440 pixels. The high computational requirements make impossible to create the stimuli in real time meanwhile running the experiment.
-> All the files and scripts needed in order to prepare the stimuli are found in the folder [`Scripts/Prepare/`](../Scripts/Prepare)
+> All the files and scripts needed in order to prepare the stimuli are found in the folder [`script/Prepare/`](../script/Prepare)
 
 The first needed thing is to know all the possible *CIELAB* values that the experimental monitor can reproduce, and then apply a proportional space in terms of all chroma for all the different hues. The script [`MAKEPOINTS.m`] is designed for doing this, it simply need to be run with the path to the Monitor ICC profile in the line 8 of the code. The script will create a file on the same folder named `PointsLab.mat` which contains all the colors that the monitor can reproduce, this information will be needed to create the stimuli.
 
@@ -25,7 +25,7 @@ The function is set to create the stimuli in the way it was set up for the exper
 
 >Please refer to [`Tables/Index.xlsx`](../Tables/Index.xlsx) for a complete list of all the stimuli sorted by number and its correspondent characteristics.
 
-Both background and patches were of a random distribution with specific means and deviations. Patches locations were set randomly within all possible locations. If any of these parameters should be changed, it is important to have a complete knowledge of how each function proceeds. Although detaild comments are found inside the function, the overall idea behind them will be explained next.  
+Both background and patches were of a random distribution with specific means and deviations. Patches locations were set randomly within all possible locations. If any of these parameters should be changed, it is important to have a complete knowledge of how each function proceeds. Although detailed comments are found inside the function, the overall idea behind them will be explained.  
 
 [`PREPARESTIMULI.m`] is simply a function which loops changing in each loop the different characteristics that the stimuli must have and then calls [`CreatePatt_MeanValue.m`]. The function is called a total of 648 times, each of them giving as an output a stimulus. There are four blocks starting in lines 20, 61, 103 and 145 which repeat the same process but using different Lightness mean `L_Target` and deviation `Deviation`. Each specific lightness has three loops: hue , trial (for invi=1:3) and chromas (for i=1:3).
 
@@ -74,7 +74,7 @@ After it is called, we obtain the following outputs:
 - `legendIm`: legend image with the location of each of the patches.
 - `meansSur`:	CIELAB mean and deviation of the background.
 
-Then the function stores all the information of each stimuli in the variable called info which is finally saved inside the folder [`STIMULISinfo/`](../Scripts/Prepare/STIMULISinfo) as a `.mat` file named as the number of the set. It also saves both PNG images (stimuli and legend) in the external folder `STIMULI/`.
+Then the function stores all the information of each stimuli in the variable called info which is finally saved inside the folder [`STIMULISinfo/`](../script/Prepare/STIMULISinfo) as a `.mat` file named as the number of the set. It also saves both PNG images (stimuli and legend) in the external folder `STIMULI/`.
 
 Therefore, the main work is done by the function [`CreatePatt_MeanValue.m`] called inside the loop, which takes all the details of the stimulus characteristics and returns images and info. The function needs both **ICC profiles** (monitor and generic LAB) to be in the function folder. It also needs to load the `PointsLab.mat` file which has to be in the same folder (file can be created with [`MAKEPOINTS.m`]).
 
@@ -87,8 +87,8 @@ Other functions that are needed to be in the path when calling for creating the 
 - [`drawcircle.m`]: it creates a circle in a `npixels` square image located on the coordinates `centerX`, `centerY` with a radius `radius`.
 - [`imgaussian.m`]: it filters a given image `I` by a gaussian with sigma `sigma` and kernel size `siz`.
 
-[`MAKEPOINTS.m`]: ../Scripts/Prepare/MAKEPOINTS.m
-[`PREPARESTIMULI.m`]: ../Scripts/Prepare/PREPARESTIMULI.m
-[`CreatePatt_MeanValue.m`]: ../Scripts/Prepare/Other/CreatePatt_MeanValue.m
-[`drawcircle.m`]: ../Scripts/Prepare/Other/drawcircle.m
-[`imgaussian.m`]: ../Scripts/Prepare/Other/imgaussian.m
+[`MAKEPOINTS.m`]: ../script/Prepare/MAKEPOINTS.m
+[`PREPARESTIMULI.m`]: ../script/Prepare/PREPARESTIMULI.m
+[`CreatePatt_MeanValue.m`]: ../script/Prepare/Other/CreatePatt_MeanValue.m
+[`drawcircle.m`]: ../script/Prepare/Other/drawcircle.m
+[`imgaussian.m`]: ../script/Prepare/Other/imgaussian.m
