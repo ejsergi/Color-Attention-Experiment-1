@@ -8,6 +8,7 @@ The full path of all the files in the codes are relative the the computer used i
 
 1. [Preparation of stimuli](../doc/Preparation.md)
 2. [Running the experiment](../doc/Run.md)
+3. Analysis of the results (This section hasn't been documented yet)
 
 
 ## Content of folders
