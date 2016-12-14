@@ -9,7 +9,7 @@ layout: default
 
 ReadMe is under construction.
 
-To see the documentation of the codes please go [here](./doc/Main.md)
+To see the documentation of the codes please go [here](./Main.md)
 
 Until work is reviewed and analyzed, all propeties of use are reserved.
 
