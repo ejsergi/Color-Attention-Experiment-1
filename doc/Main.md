@@ -1,6 +1,5 @@
 ---
 title: This is the main page
-layout: index
 ---
 
 # Documentation
