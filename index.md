@@ -1,5 +1,6 @@
 ---
 title: Index
+layout: default
 ---
 
 # Color Saliency Experiment (RIT)

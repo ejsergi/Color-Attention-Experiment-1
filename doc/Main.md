@@ -1,6 +1,6 @@
 ---
 title: This is the main page
-layout: default.html
+layout: default
 ---
 
 # Documentation
